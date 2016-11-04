@@ -17,5 +17,13 @@
         <item>Rate us</item>
         <item>Write to us</item>
     </array>
+    <string name="title_activity_journal_entry">JournalEntryActivity</string>
+
+    <string name="sample_quote">\" Winners are not people who never fail, but people who never quit. \"</string>
+    <string name="grateful_header_text">Things I am grateful for...</string>
+    <string name="amazing_things_header_text">Amazing things that happened today ...</string>
+    <string name="things_to_make_today_great_header_text">What will make today great ?</string>
+    <string name="make_today_even_better_header_text">How could I have made today even better ?</string>
+    <string name="my_affirmations_header_text">My daily affirmations. I am ....</string>
 
 </resources>

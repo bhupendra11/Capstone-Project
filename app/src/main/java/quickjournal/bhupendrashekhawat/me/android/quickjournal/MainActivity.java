@@ -1,6 +1,8 @@
 package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity
         {
 
     private String menuTitles[];
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +38,18 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         menuTitles = getResources().getStringArray(R.array.drawer_List);
+        mContext = this;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                Intent intent = new Intent(mContext, JournalEntryActivity.class);
+                startActivity(intent);
+
+
             }
         });
 
