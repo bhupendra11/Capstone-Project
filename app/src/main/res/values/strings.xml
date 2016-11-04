@@ -5,4 +5,17 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <array name="drawer_List">
+        <item>Journal</item>
+        <item>Calendar</item>
+        <item>Photos</item>
+        <item>Settings</item>
+        <item>Rate us</item>
+        <item>Write to us</item>
+    </array>
+
 </resources>
