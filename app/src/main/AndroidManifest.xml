@@ -8,6 +8,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".services.SaveJournalEntryService" />
+
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -27,6 +31,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="quickjournal.bhupendrashekhawat.me.android.quickjournal.MainActivity" />
         </activity>
+
+        <!-- Content Provider for saving Journal Entries -->
+
+        <provider
+            android:authorities="@string/content_authority"
+            android:multiprocess="true"
+            android:name="quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryProvider"/>
+
     </application>
 
 </manifest>

@@ -61,6 +61,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+        //get default Journal fragment
+        Fragment fragment = null;
+        Class fragmentClass = fragmentClass = JournalFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        setTitle(menuTitles[0]);
+
     }
 
     @Override
@@ -109,25 +126,6 @@ public class MainActivity extends AppCompatActivity
 
             fragmentClass = JournalFragment.class;
 
-             /*
-
-            // Create a new fragment and specify the planet to show based on position
-            Fragment fragment = new JournalFragment();
-            //FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            // Insert the fragment by replacing any existing fragment
-
-
-
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-
-*/
-
-
-            // Highlight the selected item, update the title, and close the drawer
-            /*mDrawerList.setItemChecked(position, true);*/
             setTitle(menuTitles[0]);
 
         } else if (id == R.id.nav_calendar) {

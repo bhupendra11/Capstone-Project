@@ -36,5 +36,7 @@ public class JournalEntryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+
+
     }
 }

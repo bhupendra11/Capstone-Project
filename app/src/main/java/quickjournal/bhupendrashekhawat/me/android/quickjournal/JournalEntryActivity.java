@@ -21,6 +21,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,8 +29,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.SaveJournalEntryService;
 
 import static java.security.AccessController.getContext;
+import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.convertDateToEpoch;
+import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.getDisplayDate;
 
 public class JournalEntryActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -39,12 +43,14 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private Calendar now;
     private DatePickerDialog dpd;
     private long epochDate =0;
+    private static String toolbarDate = "JournalEntry";
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_entry);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("JournalEntry");
         setSupportActionBar(toolbar);
 
@@ -80,6 +86,10 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
                 now.get(Calendar.DAY_OF_MONTH)
         );
 
+        toolbarDate = getDisplayDate(now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH));
+        toolbar.setTitle(toolbarDate);
 
     }
 
@@ -181,8 +191,9 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         //show Toast saying journal entry saved
         Toast.makeText(this, "Journal entry saved !", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, SaveJournalEntryService.class);
         intent.putExtra(JOURNAL_ENTRY , journalEntryModel);
+        intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
         startService(intent);
 
         return journalEntryModel;
@@ -209,7 +220,15 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
         epochDate = convertDateToEpoch(year,monthOfYear,dayOfMonth);
-        System.out.println(epochDate); // prints 1404461110000
+        System.out.println(epochDate);
+
+        toolbarDate = getDisplayDate(year,monthOfYear,dayOfMonth);
+
+        toolbar.setTitle(toolbarDate);
+
+        //toolbar.setTitle(toolbarDate);
+
+        Log.d(LOG_TAG, "Epoch Time is " +epochDate);
 
     }
 
@@ -220,20 +239,5 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
 
 
-    public long convertDateToEpoch(int year, int monthOfYear, int dayOfMonth){
 
-        long epoch = 0;
-        String str = year+"-"+monthOfYear+"-"+dayOfMonth;   // UTC
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date datenew = null;
-        try {
-            datenew = df.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        epoch= datenew.getTime()/1000;   //to seconds
-
-        return epoch;
-    }
 }
