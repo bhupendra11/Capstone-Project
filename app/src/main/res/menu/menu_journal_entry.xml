@@ -15,11 +15,7 @@
         android:title="@string/action_choose_date"
         android:icon="@drawable/ic_calendar_blank"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+
 
 
 </menu>

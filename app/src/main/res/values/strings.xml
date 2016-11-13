@@ -8,7 +8,7 @@
     <string name="action_save">Save</string>
     <string name="action_choose_date">Choose Date</string>
 
-    <string name="content_authority" >quickjournal.bhupendrashekhawat.me.android.quickjournal</string>
+    <string name="content_authority">quickjournal.bhupendrashekhawat.me.android.quickjournal</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -29,5 +29,6 @@
     <string name="things_to_make_today_great_header_text">What will make today great ?</string>
     <string name="make_today_even_better_header_text">How could I have made today even better ?</string>
     <string name="my_affirmations_header_text">My daily affirmations. I am ....</string>
+    <string name="title_activity_journal_entry_display">JournalEntryDisplayActivity</string>
 
 </resources>

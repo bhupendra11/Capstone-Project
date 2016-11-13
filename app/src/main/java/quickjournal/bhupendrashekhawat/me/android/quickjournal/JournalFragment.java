@@ -38,7 +38,7 @@ public class JournalFragment extends Fragment {
 
     public static final String LOG_TAG = JournalFragment.class.getSimpleName();
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
-
+    public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
 
     private static final String[] Journal_COLUMNS = {
             //Array of all the column names in Journal table
@@ -100,6 +100,10 @@ public class JournalFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 journalEntryModel = journalAdapter.getItem(position);
+
+                Intent displayIntent = new Intent(getActivity() , JournalEntryDisplayActivity.class);
+                displayIntent.putExtra(JOURNAL_ENTRY_MODEL , journalEntryModel);
+                startActivity(displayIntent);
 
               /*  ((Callback) getActivity()).onItemSelected(movie);*/
 

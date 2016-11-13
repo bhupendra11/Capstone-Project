@@ -37,6 +37,15 @@
             android:authorities="@string/content_authority"
             android:multiprocess="true" />
 
+        <activity
+            android:name=".JournalEntryDisplayActivity"
+            android:label="@string/title_activity_journal_entry_display"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="quickjournal.bhupendrashekhawat.me.android.quickjournal.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
