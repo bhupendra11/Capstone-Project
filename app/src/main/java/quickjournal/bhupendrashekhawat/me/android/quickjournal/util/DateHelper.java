@@ -39,4 +39,23 @@ public class DateHelper {
         String output = month+" "+dayOfMonth;
         return  output;
     }
+
+    public static String getDisplayDate(long epochDate){
+
+        long timeInmillis = epochDate * 1000;
+        Date currentDate = new Date(timeInmillis);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString =  df.format(currentDate);
+
+        String dateArray[] = dateString.split("-");
+
+        String result =  getDisplayDate(Integer.parseInt(dateArray[0]),
+                                        Integer.parseInt(dateArray[1]) ,
+                                        Integer.parseInt(dateArray[2])
+        );
+
+        return result;
+
+    }
+
 }

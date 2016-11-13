@@ -46,9 +46,8 @@ public class JournalEntryProvider extends ContentProvider{
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
             Cursor retCursor ;
-
         if(JOURNAL == sUriMatcher.match(uri)){
-            retCursor  = mOpenHelper.getReadableDatabase().query(
+            retCursor  =  mOpenHelper.getReadableDatabase().query(
                     JournalEntryContract.JournalEntry.TABLE_NAME, projection, selection, selectionArgs,
                     null, null, sortOrder);
 
@@ -56,7 +55,6 @@ public class JournalEntryProvider extends ContentProvider{
         else {
             throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-
 
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;

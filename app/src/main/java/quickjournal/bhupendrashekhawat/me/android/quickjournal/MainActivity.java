@@ -124,20 +124,20 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_journal) {
 
-            fragmentClass = JournalFragment.class;
+            fragmentClass = JournalFragment.newInstance().getClass();
 
             setTitle(menuTitles[0]);
 
         } else if (id == R.id.nav_calendar) {
 
-            fragmentClass = CalendarFragment.class;
+            fragmentClass = CalendarFragment.newInstance().getClass();
             setTitle(menuTitles[1]);
 
 
 
         } else if (id == R.id.nav_photos) {
 
-            fragmentClass = PhotosFragment.class;
+            fragmentClass = PhotosFragment.newInstance().getClass();
             setTitle(menuTitles[2]);
 
 

@@ -1,13 +1,29 @@
 package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.ListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntriesLoadedEvent;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 
 
 /**
@@ -20,55 +36,81 @@ import android.view.ViewGroup;
  */
 public class JournalFragment extends Fragment {
 
+    public static final String LOG_TAG = JournalFragment.class.getSimpleName();
+    private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
 
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String[] Journal_COLUMNS = {
+            //Array of all the column names in Journal table
+            JournalEntryContract.JournalEntry.TABLE_NAME + "." + JournalEntryContract.JournalEntry._ID,
+            JournalEntryContract.JournalEntry.COLUMN_DATE,
+            JournalEntryContract.JournalEntry.COLUMN_ENTRY
+    };
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
+    // must change.
+    public static final int COL_ID = 0;
+    public static final int COL_DATE =1;
+    public static final int COL_ENTRY = 2;
+
 
     private OnFragmentInteractionListener mListener;
+    private JournalAdapter journalAdapter;
+    private JournalEntryModel journalEntryModel;
+    private ArrayList<JournalEntryModel> journalEntryModelList = new ArrayList<>();
+    private ListView listView;
 
     public JournalFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment JournalFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static JournalFragment newInstance(String param1, String param2) {
+    public static JournalFragment newInstance() {
         JournalFragment fragment = new JournalFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+       //send Intent to fetch all journal entries
+        Intent intent = new Intent(getActivity(), JournalIntentService.class);
+        intent.setAction(ACTION_FETCH_ALL_JOURNAL_ENTRIES);
+        getActivity().startService(intent);
+
+
+
+       journalAdapter = new JournalAdapter(getActivity() , this.journalEntryModelList);
+
+        listView = (ListView) rootView.findViewById(R.id.journal_entries_list_view);
+        listView.setAdapter(journalAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                journalEntryModel = journalAdapter.getItem(position);
+
+              /*  ((Callback) getActivity()).onItemSelected(movie);*/
+
+                //do something
+
+
+            }
+        } );
+
+        return  rootView;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -109,4 +151,37 @@ public class JournalFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateJournalEntriesList(JournalEntriesLoadedEvent journalEntriesLoadedEvent){
+
+        ArrayList<JournalEntryModel> newData = journalEntriesLoadedEvent.getJournalEntryModelsList();
+
+        Log.d(LOG_TAG , "updateJournalEntriesList called , ListSize = " +journalEntryModelList.size());
+
+        journalEntryModelList.clear();
+        journalEntryModelList.addAll(newData);
+        journalAdapter.notifyDataSetChanged();
+
+       /* journalAdapter =  new JournalAdapter(getActivity() , journalEntryModelList);
+        listView.setAdapter(journalAdapter);*/
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+
 }

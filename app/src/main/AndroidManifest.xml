@@ -8,9 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service android:name=".services.SaveJournalEntryService" />
-
+        <service android:name=".services.JournalIntentService" />
 
         <activity
             android:name=".MainActivity"
@@ -35,9 +33,9 @@
         <!-- Content Provider for saving Journal Entries -->
 
         <provider
+            android:name=".data.JournalEntryProvider"
             android:authorities="@string/content_authority"
-            android:multiprocess="true"
-            android:name="quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryProvider"/>
+            android:multiprocess="true" />
 
     </application>
 

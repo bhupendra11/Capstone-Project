@@ -20,18 +20,12 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.SaveJournalEntryService;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 
-import static java.security.AccessController.getContext;
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.convertDateToEpoch;
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.getDisplayDate;
 
@@ -45,6 +39,9 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private long epochDate =0;
     private static String toolbarDate = "JournalEntry";
     private Toolbar toolbar;
+
+    private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
+    private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,11 +184,13 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         EditText howMadeTodayEvenBetter = (EditText) findViewById(R.id.made_today_better_edittext);
         journalEntryModel.setHowCouldIHaveMadeTodayBetter(howMadeTodayEvenBetter.getText().toString());
 
+        journalEntryModel.setTimestamp(epochDate);
 
         //show Toast saying journal entry saved
         Toast.makeText(this, "Journal entry saved !", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, SaveJournalEntryService.class);
+        Intent intent = new Intent(this, JournalIntentService.class);
+        intent.setAction(ACTION_SAVE_JOURNAL_ENTRY);
         intent.putExtra(JOURNAL_ENTRY , journalEntryModel);
         intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
         startService(intent);

@@ -1,10 +1,15 @@
 package quickjournal.bhupendrashekhawat.me.android.quickjournal.data;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalFragment;
 
 /**
  * Created by Bhupendra Shekhawat on 4/11/16.
@@ -13,7 +18,7 @@ import java.util.StringTokenizer;
 public class JournalEntryModel implements Parcelable {
 
     private String quote;
-    private int timestamp;
+    private long timestamp;
     private ArrayList<String> gratefulForList;
     private ArrayList<String> makesTodayGreatList;
     private String dailyAffirmations;
@@ -43,12 +48,12 @@ public class JournalEntryModel implements Parcelable {
         this.quote = quote;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(long epoch) {
+        this.timestamp = epoch;
     }
 
     public ArrayList<String> getMakesTodayGreatList() {
@@ -92,9 +97,29 @@ public class JournalEntryModel implements Parcelable {
         return output;
     }
 
+
+    // get JournalEntryModel object from Cursor
+    public JournalEntryModel(Cursor cursor) {
+
+        Gson gson = new Gson();
+        long date = cursor.getLong(JournalFragment.COL_DATE);
+        String journalEntryJson = cursor.getString(JournalFragment.COL_ENTRY);
+
+        JournalEntryModel journalEntryObj = gson.fromJson(journalEntryJson, JournalEntryModel.class);
+
+        this.quote = journalEntryObj.getQuote();
+        this.timestamp = journalEntryObj.getTimestamp();
+        this.gratefulForList = journalEntryObj.getGratefulForList();
+        this.makesTodayGreatList = journalEntryObj.getMakesTodayGreatList();
+        this.dailyAffirmations = journalEntryObj.getDailyAffirmations();
+        this.amazingThingsHappenedList = journalEntryObj.getAmazingThingsHappenedList();
+        this.howCouldIHaveMadeTodayBetter = journalEntryObj.getHowCouldIHaveMadeTodayBetter();
+    }
+
+
     public JournalEntryModel(Parcel in) {
         quote = in.readString();
-        timestamp = in.readInt();
+        timestamp = in.readLong();
         if (in.readByte() == 0x01) {
             gratefulForList = new ArrayList<String>();
             in.readList(gratefulForList, String.class.getClassLoader());
@@ -125,7 +150,7 @@ public class JournalEntryModel implements Parcelable {
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(quote);
-        dest.writeInt(timestamp);
+        dest.writeLong(timestamp);
         if (gratefulForList == null) {
             dest.writeByte((byte) (0x00));
         } else {
