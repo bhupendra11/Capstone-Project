@@ -19,6 +19,9 @@
     android:orientation="vertical">
 
 
+    <android.support.v4.widget.Space
+        android:layout_width="1dp"
+        android:layout_height="5dp" />
 
 
     <TextView
@@ -40,11 +43,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 
-    <EditText
+    <include
+        android:id="@+id/grateful_editext"
+        layout="@layout/edit_text_with_numbers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minLines="2"
-        android:hint="Here..."/>
+        android:layout_height="wrap_content" />
+
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -58,11 +62,17 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 
-    <EditText
+   <!-- <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"
-        android:hint="Here ..."/>
+        android:hint="Here ..."/>-->
+
+    <include
+    android:id="@+id/today_great_editext"
+    layout="@layout/edit_text_with_numbers"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -77,6 +87,7 @@
         />
 
     <EditText
+        android:id="@+id/affirmations_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"
@@ -94,11 +105,17 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 
-    <EditText
+    <!--<EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"
-        android:hint="Here..."/>
+        android:hint="Here..."/>-->
+
+    <include
+    android:id="@+id/amazing_editext"
+    layout="@layout/edit_text_with_numbers"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -113,6 +130,7 @@
         />
 
     <EditText
+        android:id="@+id/made_today_better_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"

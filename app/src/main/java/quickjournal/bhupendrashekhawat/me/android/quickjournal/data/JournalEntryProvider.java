@@ -15,19 +15,19 @@ import android.support.annotation.Nullable;
  */
 
 
-public class TalkshowProvider extends ContentProvider{
+public class JournalEntryProvider extends ContentProvider{
 
     // The Uri matcher used by this content provider
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private TalkshowDbHelper mOpenHelper ;
-    static final int TALKSHOW = 100;
+    private JournalEntryDbHelper mOpenHelper ;
+    static final int JOURNAL = 100;
 
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = TalkshowContract.CONTENT_AUTHORITY;
+        final String authority = JournalEntryContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority,TalkshowContract.PATH_TALKSHOW,TALKSHOW);
+        matcher.addURI(authority,JournalEntryContract.PATH_JOURNAL, JOURNAL);
 
         return  matcher;
 
@@ -36,7 +36,7 @@ public class TalkshowProvider extends ContentProvider{
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new TalkshowDbHelper(getContext());
+        mOpenHelper = new JournalEntryDbHelper(getContext());
 
         return true;
     }
@@ -47,9 +47,9 @@ public class TalkshowProvider extends ContentProvider{
 
             Cursor retCursor ;
 
-        if(TALKSHOW == sUriMatcher.match(uri)){
+        if(JOURNAL == sUriMatcher.match(uri)){
             retCursor  = mOpenHelper.getReadableDatabase().query(
-                    TalkshowContract.TalkshowEntry.TABLE_NAME, projection, selection, selectionArgs,
+                    JournalEntryContract.JournalEntry.TABLE_NAME, projection, selection, selectionArgs,
                     null, null, sortOrder);
 
         }
@@ -69,8 +69,8 @@ public class TalkshowProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            case TALKSHOW:
-                return TalkshowContract.TalkshowEntry.CONTENT_TYPE;
+            case JOURNAL:
+                return JournalEntryContract.JournalEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -88,10 +88,10 @@ public class TalkshowProvider extends ContentProvider{
         Uri returnUri;
 
         switch (sUriMatcher.match(uri)){
-            case TALKSHOW : {
-                long _id = db.insert(TalkshowContract.TalkshowEntry.TABLE_NAME, null, values);
+            case JOURNAL: {
+                long _id = db.insert(JournalEntryContract.JournalEntry.TABLE_NAME, null, values);
                 if( _id >0){
-                    returnUri  = TalkshowContract.TalkshowEntry.buildTalkshowUri(_id);
+                    returnUri  = JournalEntryContract.JournalEntry.buildTalkshowUri(_id);
                 }
                 else{
                     throw new android.database.SQLException("Failed to insert row into "+uri);
@@ -119,8 +119,8 @@ public class TalkshowProvider extends ContentProvider{
         if (null == selection) selection = "1";
 
         switch (match){
-            case TALKSHOW:
-                rowsDeleted = db.delete(TalkshowContract.TalkshowEntry.TABLE_NAME , selection, selectionArgs);
+            case JOURNAL:
+                rowsDeleted = db.delete(JournalEntryContract.JournalEntry.TABLE_NAME , selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknows uri " + uri);
@@ -144,8 +144,8 @@ public class TalkshowProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
 
         switch (match){
-            case TALKSHOW:
-                rowsUpdated = db.update(TalkshowContract.TalkshowEntry.TABLE_NAME, values, selection, selectionArgs);
+            case JOURNAL:
+                rowsUpdated = db.update(JournalEntryContract.JournalEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Failed to update row "+rowsUpdated);
@@ -155,8 +155,6 @@ public class TalkshowProvider extends ContentProvider{
         if(rowsUpdated!=0 ){
             getContext().getContentResolver().notifyChange(uri,null);
         }
-
-        // Student: return the actual rows updated
         return rowsUpdated;
 
     }
