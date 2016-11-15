@@ -20,10 +20,16 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntriesLoadedEvent;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
@@ -45,6 +51,9 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
     private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
+    private static final String ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE ";
+
+    public static final String EMPTY_STRING="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,12 +132,6 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
            JournalEntryModel savedEntry =  saveEntry();
             Log.d(LOG_TAG, savedEntry.toString());
 
-            /*SaveJournalEntryTask saveJournalEntryTask = new SaveJournalEntryTask(getContext(), rootView);
-            saveJournalEntryTask.execute(savedEntry);*/
-
-
-
-           // System.out.println(savedEntry);
         }
         if(id == R.id.action_choose_date){
             dpd.show(getFragmentManager(), "Datepickerdialog");
@@ -181,12 +184,19 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         return curJournalEntryModel;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
         JournalEntryModel savedEntry =  saveEntry();
         Log.d(LOG_TAG, savedEntry.toString());
+
 
 
     }
@@ -210,6 +220,8 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
         toolbar.setTitle(toolbarDate);
 
+        populateEditEntryOnDateChange();
+
         //toolbar.setTitle(toolbarDate);
 
         Log.d(LOG_TAG, "Epoch Time is " +epochDate);
@@ -221,6 +233,27 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
     }
 
+    public void populateEditEntryOnDateChange(){
+
+        Intent intent = new Intent(this, JournalIntentService.class);
+        intent.setAction(ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE );
+        intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
+        startService(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateEditEntryOnDateChange(JournalEntryEditUpdateOnDateChangeEvent journalEntryEditUpdateOnDateChangeEvent){
+
+
+
+        JournalEntryModel journalEntryModel = journalEntryEditUpdateOnDateChangeEvent.getJournalEntryModel();
+        Log.d(LOG_TAG, "   updateEditEntryOnDateChange is called with  journalEntryModel :\n " +journalEntryModel);
+
+
+            populateJournalEntry(journalEntryModel);
+
+
+    }
 
 
     public void handleIntentHere(Intent intent){
@@ -239,50 +272,65 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     public void populateJournalEntry(JournalEntryModel journalEntryModel){
 
         GridLayout grateful_gridlayout = (GridLayout) findViewById(R.id.grateful_editext);
-        ArrayList<String> gratefulList = journalEntryModel.getGratefulForList();
-
         TextView gratefulLine1 = (TextView) grateful_gridlayout.findViewById(R.id.line1);
-        gratefulLine1.setText(gratefulList.get(0));
-
         TextView gratefulLine2 = (TextView) grateful_gridlayout.findViewById(R.id.line2);
-        gratefulLine2.setText(gratefulList.get(1));
-
         TextView gratefulLine3 = (TextView) grateful_gridlayout.findViewById(R.id.line3);
-        gratefulLine3.setText(gratefulList.get(2));
-
         GridLayout today_great_gridlayout = (GridLayout) findViewById(R.id.today_great_editext);
-        ArrayList<String> todayGreatList = journalEntryModel.getMakesTodayGreatList();
-
         TextView todayGreatLine1 = (TextView) today_great_gridlayout.findViewById(R.id.line1);
-        todayGreatLine1.setText(todayGreatList.get(0));
-
         TextView todayGreatLine2 = (TextView) today_great_gridlayout.findViewById(R.id.line2);
-        todayGreatLine2.setText(todayGreatList.get(1));
-
         TextView todayGreatLine3 = (TextView) today_great_gridlayout.findViewById(R.id.line3);
-        todayGreatLine3.setText(todayGreatList.get(2));
-
         TextView myAffirmations = (TextView) findViewById(R.id.affirmations_edittext);
-        myAffirmations.setText(journalEntryModel.getDailyAffirmations());
-
-
         GridLayout amazing_things_gridlayout = (GridLayout) findViewById(R.id.amazing_editext);
-        ArrayList<String> amazingThingsTodayList = journalEntryModel.getAmazingThingsHappenedList();
-
         TextView amazingThingsTodayLine1 = (TextView) amazing_things_gridlayout.findViewById(R.id.line1);
-        amazingThingsTodayLine1.setText(amazingThingsTodayList.get(0));
-
         TextView amazingThingsTodayLine2 = (TextView) amazing_things_gridlayout.findViewById(R.id.line2);
-        amazingThingsTodayLine2.setText(amazingThingsTodayList.get(1));
-
         TextView amazingThingsTodayLine3 = (TextView) amazing_things_gridlayout.findViewById(R.id.line3);
-        amazingThingsTodayLine3.setText(amazingThingsTodayList.get(2));
-
-
         TextView howMadeTodayEvenBetter = (TextView) findViewById(R.id.made_today_better_edittext);
-        howMadeTodayEvenBetter.setText(journalEntryModel.getHowCouldIHaveMadeTodayBetter());
 
-        getSupportActionBar().setTitle(DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
+        if(journalEntryModel == null){
+            getSupportActionBar().setTitle(DateHelper.getDisplayDate(epochDate));
+
+            gratefulLine1.setText(EMPTY_STRING);
+            gratefulLine2.setText(EMPTY_STRING);
+            gratefulLine3.setText(EMPTY_STRING);
+
+            todayGreatLine1.setText(EMPTY_STRING);
+            todayGreatLine2.setText(EMPTY_STRING);
+            todayGreatLine3.setText(EMPTY_STRING);
+
+            myAffirmations.setText(EMPTY_STRING);
+
+            amazingThingsTodayLine1.setText(EMPTY_STRING);
+            amazingThingsTodayLine2.setText(EMPTY_STRING);
+            amazingThingsTodayLine3.setText(EMPTY_STRING);
+
+            howMadeTodayEvenBetter.setText(EMPTY_STRING);
+
+        }
+        else{
+            ArrayList<String> gratefulList = journalEntryModel.getGratefulForList();
+            gratefulLine1.setText(gratefulList.get(0));
+            gratefulLine2.setText(gratefulList.get(1));
+            gratefulLine3.setText(gratefulList.get(2));
+
+            ArrayList<String> todayGreatList = journalEntryModel.getMakesTodayGreatList();
+            todayGreatLine1.setText(todayGreatList.get(0));
+            todayGreatLine2.setText(todayGreatList.get(1));
+            todayGreatLine3.setText(todayGreatList.get(2));
+
+            myAffirmations.setText(journalEntryModel.getDailyAffirmations());
+
+            ArrayList<String> amazingThingsTodayList = journalEntryModel.getAmazingThingsHappenedList();
+            amazingThingsTodayLine1.setText(amazingThingsTodayList.get(0));
+            amazingThingsTodayLine2.setText(amazingThingsTodayList.get(1));
+            amazingThingsTodayLine3.setText(amazingThingsTodayList.get(2));
+
+            howMadeTodayEvenBetter.setText(journalEntryModel.getHowCouldIHaveMadeTodayBetter());
+
+            getSupportActionBar().setTitle(DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
+        }
+
+
+
 
     }
 

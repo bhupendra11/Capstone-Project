@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntriesLoadedEvent;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryModelLoadedEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
@@ -43,6 +44,8 @@ public class JournalIntentService extends IntentService {
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
 
     private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
+
+    private static final String ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE ";
 
     private ArrayList<JournalEntryModel> mJournalEntriesist = new ArrayList<JournalEntryModel>();
     Gson gson = new Gson();
@@ -80,6 +83,11 @@ public class JournalIntentService extends IntentService {
                 JournalEntryModel journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY);
                 handleActionUpdateJournalEntry(journalEntryModel);
             }
+            else if(ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE.equals(action)){
+                long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
+                handleActionUpdateEditJournalEntryOnDateChange(journalEntryDate);
+            }
+
 
         }
 
@@ -159,10 +167,10 @@ public class JournalIntentService extends IntentService {
 
         Log.d(LOG_TAG , "EventBus called with list size = " +mJournalEntriesist.size());
 
-        for (JournalEntryModel journalEntryModel :mJournalEntriesist){
+       /* for (JournalEntryModel journalEntryModel :mJournalEntriesist){
             Log.d(LOG_TAG , journalEntryModel.toString());
         }
-
+*/
         EventBus.getDefault().post(new JournalEntriesLoadedEvent(mJournalEntriesist));
 
         cursor.close();
@@ -172,42 +180,6 @@ public class JournalIntentService extends IntentService {
     }
 
 
-   /* private void handleActionFetchJournalEntryToEdit( long journalEntryDate){
-
-        Log.d(LOG_TAG , "Journal Entry to be fetched for date " +journalEntryDate );
-        int numRows =0;
-        Cursor cursor = mContext.getContentResolver().query(
-                JournalEntryContract.JournalEntry.CONTENT_URI,
-                null,   //projection
-                JournalEntryContract.JournalEntry.COLUMN_DATE + " =?",
-                new String[]{Long.toString(journalEntryDate)},      // selectionArgs : gets the rows with this movieID
-                null             // Sort order
-
-        );
-
-        if (cursor != null) {
-            numRows = cursor.getCount();
-            cursor.close();
-        }
-
-        JournalEntryModel journalEntryModel=  null;
-        if (numRows == 1) {    // Fetch that row as JournalEntryModel object
-
-            if(cursor != null) {
-                while (cursor.moveToNext()) {
-                   journalEntryModel = new JournalEntryModel(cursor);
-
-                }
-            }
-
-        }
-
-
-        //send this object via event
-        EventBus.getDefault().post(new JournalEntryModelLoadedEvent(journalEntryModel));
-
-        cursor.close();
-    }*/
 
 
     private void  handleActionUpdateJournalEntry(JournalEntryModel journalEntryModel){
@@ -254,6 +226,40 @@ public class JournalIntentService extends IntentService {
 
 
         cursor.close();
+    }
+
+
+    public void  handleActionUpdateEditJournalEntryOnDateChange(long journalEntryDate){
+
+        JournalEntryModel journalEntryModel = null;
+
+        Log.d(LOG_TAG , "Journal Entry to be updatedis for date " +DateHelper.getDisplayDate(journalEntryDate) );
+        int numRows =0;
+        Cursor cursor = mContext.getContentResolver().query(
+                JournalEntryContract.JournalEntry.CONTENT_URI,
+                null,   //projection
+                JournalEntryContract.JournalEntry.COLUMN_DATE + " =?",
+                new String[]{Long.toString(journalEntryDate)},      // selectionArgs : gets the rows with this movieID
+                null             // Sort order
+
+        );
+
+        if (cursor != null) {
+            numRows = cursor.getCount();
+        }
+
+        if(cursor != null) {
+            while (cursor.moveToNext()) {
+                journalEntryModel = new JournalEntryModel(cursor);
+            }
+        }
+
+        if(journalEntryModel != null) {
+            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+        }
+
+        EventBus.getDefault().post(new JournalEntryEditUpdateOnDateChangeEvent(journalEntryModel));
+
     }
 
 
