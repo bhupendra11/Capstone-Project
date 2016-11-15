@@ -26,6 +26,9 @@ public class JournalEntryDisplayActivity extends AppCompatActivity {
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
     private JournalEntryModel journalEntryModel;
     private Toolbar toolbar;
+    private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
+    private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,12 @@ public class JournalEntryDisplayActivity extends AppCompatActivity {
         if(id == R.id.action_edit){
 
             //do something
+            Intent intent = new Intent(this, JournalEntryActivity.class);
+            intent.setAction(ACTION_UPDATE_JOURNAL_ENTRY);
+            intent.putExtra(JOURNAL_ENTRY_MODEL, journalEntryModel);
+            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            finish();
 
         }
 

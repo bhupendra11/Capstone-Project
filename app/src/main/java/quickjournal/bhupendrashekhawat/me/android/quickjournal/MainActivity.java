@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         //get default Journal fragment
         Fragment fragment = null;
         Class fragmentClass = fragmentClass = JournalFragment.class;
@@ -77,10 +83,9 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
         setTitle(menuTitles[0]);
-
     }
 
-    @Override
+            @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {

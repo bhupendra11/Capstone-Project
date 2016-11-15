@@ -27,9 +27,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:text="@string/sample_quote"
         android:id="@+id/quote_textview"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="28sp"
+        android:layout_gravity="center"
         />
     <android.support.v4.widget.Space
         android:layout_width="1dp"

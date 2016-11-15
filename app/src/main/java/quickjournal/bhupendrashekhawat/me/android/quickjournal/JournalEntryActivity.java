@@ -25,6 +25,7 @@ import java.util.Calendar;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.convertDateToEpoch;
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.getDisplayDate;
@@ -40,8 +41,10 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private static String toolbarDate = "JournalEntry";
     private Toolbar toolbar;
 
+    public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
+    private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setFonts();
 
         //for calendar to pick date
         now = Calendar.getInstance();
@@ -87,6 +91,15 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH));
         toolbar.setTitle(toolbarDate);
+
+
+        //check if intent is supplied and if prsesent handle it
+        Intent intent = getIntent();
+        if(intent != null){
+            handleIntentHere(intent);
+        }
+
+
 
     }
 
@@ -129,10 +142,153 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        JournalEntryModel savedEntry =  saveEntry();
+        Log.d(LOG_TAG, savedEntry.toString());
+    }
+
     public JournalEntryModel saveEntry(){
 
 
+        JournalEntryModel curJournalEntryModel = getCurrentJournalEntryModelObj();
 
+        //show Toast saying journal entry saved
+        Toast.makeText(this, "Journal entry saved !", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, JournalIntentService.class);
+        intent.setAction(ACTION_SAVE_JOURNAL_ENTRY);
+        intent.putExtra(JOURNAL_ENTRY , curJournalEntryModel);
+        intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
+        startService(intent);
+
+        return curJournalEntryModel;
+    }
+
+    public JournalEntryModel updateEntry(){
+        JournalEntryModel curJournalEntryModel = getCurrentJournalEntryModelObj();
+
+        //show Toast saying journal entry saved
+        Toast.makeText(this, "Journal entry updated !", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, JournalIntentService.class);
+        intent.setAction(ACTION_UPDATE_JOURNAL_ENTRY);
+        intent.putExtra(JOURNAL_ENTRY , curJournalEntryModel);
+        //intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
+        startService(intent);
+
+        return curJournalEntryModel;
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        JournalEntryModel savedEntry =  saveEntry();
+        Log.d(LOG_TAG, savedEntry.toString());
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        JournalEntryModel savedEntry =  saveEntry();
+        Log.d(LOG_TAG, savedEntry.toString());
+
+
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
+        epochDate = convertDateToEpoch(year,monthOfYear,dayOfMonth);
+        System.out.println(epochDate);
+
+        toolbarDate = getDisplayDate(year,monthOfYear,dayOfMonth);
+
+        toolbar.setTitle(toolbarDate);
+
+        //toolbar.setTitle(toolbarDate);
+
+        Log.d(LOG_TAG, "Epoch Time is " +epochDate);
+
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+
+    }
+
+
+
+    public void handleIntentHere(Intent intent){
+        final String action = intent.getAction();
+        if(ACTION_UPDATE_JOURNAL_ENTRY.equals(action)){
+
+            //populate the journalEntry with already available data
+
+            JournalEntryModel journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY_MODEL);
+            epochDate = journalEntryModel.getTimestamp();
+            populateJournalEntry(journalEntryModel);
+            updateEntry();
+        }
+    }
+
+    public void populateJournalEntry(JournalEntryModel journalEntryModel){
+
+        GridLayout grateful_gridlayout = (GridLayout) findViewById(R.id.grateful_editext);
+        ArrayList<String> gratefulList = journalEntryModel.getGratefulForList();
+
+        TextView gratefulLine1 = (TextView) grateful_gridlayout.findViewById(R.id.line1);
+        gratefulLine1.setText(gratefulList.get(0));
+
+        TextView gratefulLine2 = (TextView) grateful_gridlayout.findViewById(R.id.line2);
+        gratefulLine2.setText(gratefulList.get(1));
+
+        TextView gratefulLine3 = (TextView) grateful_gridlayout.findViewById(R.id.line3);
+        gratefulLine3.setText(gratefulList.get(2));
+
+        GridLayout today_great_gridlayout = (GridLayout) findViewById(R.id.today_great_editext);
+        ArrayList<String> todayGreatList = journalEntryModel.getMakesTodayGreatList();
+
+        TextView todayGreatLine1 = (TextView) today_great_gridlayout.findViewById(R.id.line1);
+        todayGreatLine1.setText(todayGreatList.get(0));
+
+        TextView todayGreatLine2 = (TextView) today_great_gridlayout.findViewById(R.id.line2);
+        todayGreatLine2.setText(todayGreatList.get(1));
+
+        TextView todayGreatLine3 = (TextView) today_great_gridlayout.findViewById(R.id.line3);
+        todayGreatLine3.setText(todayGreatList.get(2));
+
+        TextView myAffirmations = (TextView) findViewById(R.id.affirmations_edittext);
+        myAffirmations.setText(journalEntryModel.getDailyAffirmations());
+
+
+        GridLayout amazing_things_gridlayout = (GridLayout) findViewById(R.id.amazing_editext);
+        ArrayList<String> amazingThingsTodayList = journalEntryModel.getAmazingThingsHappenedList();
+
+        TextView amazingThingsTodayLine1 = (TextView) amazing_things_gridlayout.findViewById(R.id.line1);
+        amazingThingsTodayLine1.setText(amazingThingsTodayList.get(0));
+
+        TextView amazingThingsTodayLine2 = (TextView) amazing_things_gridlayout.findViewById(R.id.line2);
+        amazingThingsTodayLine2.setText(amazingThingsTodayList.get(1));
+
+        TextView amazingThingsTodayLine3 = (TextView) amazing_things_gridlayout.findViewById(R.id.line3);
+        amazingThingsTodayLine3.setText(amazingThingsTodayList.get(2));
+
+
+        TextView howMadeTodayEvenBetter = (TextView) findViewById(R.id.made_today_better_edittext);
+        howMadeTodayEvenBetter.setText(journalEntryModel.getHowCouldIHaveMadeTodayBetter());
+
+        getSupportActionBar().setTitle(DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
+
+    }
+
+
+
+    public JournalEntryModel getCurrentJournalEntryModelObj(){
         JournalEntryModel journalEntryModel = new JournalEntryModel();
 
         GridLayout grateful_gridlayout = (GridLayout) findViewById(R.id.grateful_editext);
@@ -186,56 +342,37 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
         journalEntryModel.setTimestamp(epochDate);
 
-        //show Toast saying journal entry saved
-        Toast.makeText(this, "Journal entry saved !", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(this, JournalIntentService.class);
-        intent.setAction(ACTION_SAVE_JOURNAL_ENTRY);
-        intent.putExtra(JOURNAL_ENTRY , journalEntryModel);
-        intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
-        startService(intent);
-
         return journalEntryModel;
     }
 
+    public void setFonts(){
+        //custom font for quotes textview
+        TextView text = (TextView) findViewById(R.id.quote_textview);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/GreatVibes-Regular.ttf");
+        text.setTypeface(tf);
 
-    @Override
-    protected void onStop() {
-        JournalEntryModel savedEntry =  saveEntry();
-        Log.d(LOG_TAG, savedEntry.toString());
+        TextView text1 = (TextView) findViewById(R.id.grateful_textview);
+        Typeface tf1 = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
+        text1.setTypeface(tf1);
 
-        super.onStop();
-    }
+        TextView text2 = (TextView) findViewById(R.id.make_today_great_textview);
+        Typeface tf2 = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
+        text2.setTypeface(tf2);
 
-    @Override
-    protected void onDestroy() {
-        JournalEntryModel savedEntry =  saveEntry();
-        Log.d(LOG_TAG, savedEntry.toString());
+        TextView text3 = (TextView) findViewById(R.id.my_affirmations_textview);
+        Typeface tf3 = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
+        text3.setTypeface(tf3);
 
-        super.onDestroy();
-    }
+        TextView text4 = (TextView) findViewById(R.id.amazing_things_happened_textview);
+        Typeface tf4 = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
+        text4.setTypeface(tf4);
 
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        TextView text5 = (TextView) findViewById(R.id.made_today_better_textview);
+        Typeface tf5 = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
+        text5.setTypeface(tf5);
 
-        epochDate = convertDateToEpoch(year,monthOfYear,dayOfMonth);
-        System.out.println(epochDate);
-
-        toolbarDate = getDisplayDate(year,monthOfYear,dayOfMonth);
-
-        toolbar.setTitle(toolbarDate);
-
-        //toolbar.setTitle(toolbarDate);
-
-        Log.d(LOG_TAG, "Epoch Time is " +epochDate);
 
     }
-
-    @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-
-    }
-
 
 
 

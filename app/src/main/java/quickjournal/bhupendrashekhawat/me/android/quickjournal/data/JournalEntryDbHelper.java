@@ -1,8 +1,14 @@
 package quickjournal.bhupendrashekhawat.me.android.quickjournal.data;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bhupendra Singh on 24/3/16.
@@ -21,7 +27,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_TALKSHOW_TABLE ="CREATE TABLE "+ JournalEntryContract.JournalEntry.TABLE_NAME+ " ("+
                     JournalEntryContract.JournalEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    JournalEntryContract.JournalEntry.COLUMN_DATE+" INTEGER, "+
+                    JournalEntryContract.JournalEntry.COLUMN_DATE+" INTEGER UNIQUE, "+
                     JournalEntryContract.JournalEntry.COLUMN_ENTRY +" TEXT);" ;
 
         db.execSQL(SQL_CREATE_TALKSHOW_TABLE);
@@ -34,4 +40,9 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + JournalEntryContract.JournalEntry.TABLE_NAME);
         onCreate(db);
     }
+
+
+
+
 }
+
