@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.FetchJounalEntryForDateEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntriesLoadedEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryModelLoadedEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
 
@@ -42,6 +42,7 @@ public class JournalIntentService extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
+    private static final String ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_JOURNAL_ENTRY_FOR_DATE";
 
     private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
 
@@ -86,6 +87,10 @@ public class JournalIntentService extends IntentService {
             else if(ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE.equals(action)){
                 long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
                 handleActionUpdateEditJournalEntryOnDateChange(journalEntryDate);
+            }
+            else if (ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE.equals(action)){
+                long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
+                handleActionFetchJournalEntryForDate(journalEntryDate);
             }
 
 
@@ -179,7 +184,34 @@ public class JournalIntentService extends IntentService {
 
     }
 
+    public void handleActionFetchJournalEntryForDate(long journalEntryDate){
+        JournalEntryModel journalEntryModel = null;
 
+        Log.d(LOG_TAG , "Journal Entry to be to fetch for date in calendar fragment " +DateHelper.getDisplayDate(journalEntryDate) );
+        Cursor cursor = mContext.getContentResolver().query(
+                JournalEntryContract.JournalEntry.CONTENT_URI,
+                null,   //projection
+                JournalEntryContract.JournalEntry.COLUMN_DATE + " =?",
+                new String[]{Long.toString(journalEntryDate)},      // selectionArgs : gets the rows with this movieID
+                null             // Sort order
+
+        );
+
+
+        if(cursor != null) {
+            while (cursor.moveToNext()) {
+                journalEntryModel = new JournalEntryModel(cursor);
+            }
+        }
+
+        if(journalEntryModel != null) {
+            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+        }
+
+        EventBus.getDefault().post(new FetchJounalEntryForDateEvent(journalEntryModel));
+
+        cursor.close();
+    }
 
 
     private void  handleActionUpdateJournalEntry(JournalEntryModel journalEntryModel){
@@ -233,7 +265,7 @@ public class JournalIntentService extends IntentService {
 
         JournalEntryModel journalEntryModel = null;
 
-        Log.d(LOG_TAG , "Journal Entry to be updatedis for date " +DateHelper.getDisplayDate(journalEntryDate) );
+        Log.d(LOG_TAG , "Journal Entry to be updated is for date " +DateHelper.getDisplayDate(journalEntryDate)+" Epoch = "+journalEntryDate );
         int numRows =0;
         Cursor cursor = mContext.getContentResolver().query(
                 JournalEntryContract.JournalEntry.CONTENT_URI,
@@ -259,6 +291,9 @@ public class JournalIntentService extends IntentService {
         }
 
         EventBus.getDefault().post(new JournalEntryEditUpdateOnDateChangeEvent(journalEntryModel));
+        cursor.close();
+
+
 
     }
 

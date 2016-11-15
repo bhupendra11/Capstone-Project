@@ -15,7 +15,7 @@ public class DateHelper {
     public static long convertDateToEpoch(int year, int monthOfYear, int dayOfMonth){
 
         long epoch = 0;
-        String str = year+"-"+monthOfYear+"-"+dayOfMonth;   // UTC
+        String str = year+"-"+(monthOfYear+1)+"-"+dayOfMonth;   // UTC
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date datenew = null;
@@ -34,7 +34,7 @@ public class DateHelper {
 
     public static String getDisplayDate(int year, int monthOfYear, int dayOfMonth) {
 
-        String month = new DateFormatSymbols().getMonths()[monthOfYear];
+        String month = new DateFormatSymbols().getMonths()[monthOfYear-1];
 
         String output = month+" "+dayOfMonth;
         return  output;

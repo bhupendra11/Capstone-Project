@@ -10,6 +10,10 @@
 
     <string name="content_authority">quickjournal.bhupendrashekhawat.me.android.quickjournal</string>
 
+    <string name="string_journal_fragment_empty_list">No journal entries found. Start your journal journey today.</string>
+
+    <string name="string_calendar_fragment_empty_list">No journal entry found for the selected day </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

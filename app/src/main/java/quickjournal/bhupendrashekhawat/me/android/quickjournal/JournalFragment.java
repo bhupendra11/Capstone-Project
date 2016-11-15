@@ -4,15 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -95,6 +94,9 @@ public class JournalFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.journal_entries_list_view);
         listView.setAdapter(journalAdapter);
+
+        TextView listEmptyTextView = (TextView) rootView.findViewById(R.id.empty_journal_list_textview);
+        listView.setEmptyView(listEmptyTextView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

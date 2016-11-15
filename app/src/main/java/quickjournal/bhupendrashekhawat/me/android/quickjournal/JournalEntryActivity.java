@@ -97,8 +97,11 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         );
 
         toolbarDate = getDisplayDate(now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
+                now.get(Calendar.MONTH ) +1,
                 now.get(Calendar.DAY_OF_MONTH));
+
+        Log.d(LOG_TAG, "Toolbar date = "+toolbarDate);
+
         toolbar.setTitle(toolbarDate);
 
 

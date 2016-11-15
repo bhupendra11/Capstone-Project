@@ -17,4 +17,12 @@
 
     </ListView>
 
+    <!-- Here is the view to show if the list is emtpy -->
+    <TextView android:id="@+id/empty_journal_list_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/string_journal_fragment_empty_list" />
+
 </FrameLayout>

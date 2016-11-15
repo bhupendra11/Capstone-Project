@@ -3,15 +3,14 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal.events;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 
 /**
- * Created by Bhupendra Shekhawat on 14/11/16.
+ * Created by Bhupendra Shekhawat on 15/11/16.
  */
 
-/*
-public class JournalEntryModelLoadedEvent {
+public class FetchJounalEntryForDateEvent {
 
     private JournalEntryModel journalEntryModel;
 
-    public JournalEntryModelLoadedEvent(JournalEntryModel journalEntryModel){
+    public FetchJounalEntryForDateEvent (JournalEntryModel journalEntryModel){
         this.journalEntryModel = journalEntryModel;
     }
 
@@ -25,4 +24,3 @@ public class JournalEntryModelLoadedEvent {
 
 
 }
-*/
