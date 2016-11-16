@@ -2,6 +2,7 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class JournalAdapter extends ArrayAdapter<JournalEntryModel>
 {
     Context mContext;
     List<JournalEntryModel> journalEntryModelList = null;
+    public static final String ACTION_DATA_UPDATED = "quickjournal.bhupendrashekhawat.me.android.quickjournal.ACTION_DATA_UPDATED";
 
     public JournalAdapter(Activity context, List<JournalEntryModel> journalEntryModelList){
 
@@ -84,6 +86,14 @@ public class JournalAdapter extends ArrayAdapter<JournalEntryModel>
     static class ViewHolder{
         TextView dateTextView;
         TextView grateFulOneTextView;
+
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED).setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
 
     }
 }

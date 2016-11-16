@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalAdapter;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.FetchJounalEntryForDateEvent;
@@ -177,6 +178,9 @@ public class JournalIntentService extends IntentService {
         }
 */
         EventBus.getDefault().post(new JournalEntriesLoadedEvent(mJournalEntriesist));
+
+        Intent dataUpdatedIntent = new Intent(JournalAdapter.ACTION_DATA_UPDATED).setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
 
         cursor.close();
 

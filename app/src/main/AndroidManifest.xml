@@ -3,6 +3,7 @@
     package="quickjournal.bhupendrashekhawat.me.android.quickjournal">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,8 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".services.JournalIntentService" />
-
-
 
         <activity
             android:name=".MainActivity"
@@ -38,7 +37,9 @@
         <provider
             android:name=".data.JournalEntryProvider"
             android:authorities="@string/content_authority"
-            android:multiprocess="true" />
+            android:multiprocess="true"
+            android:grantUriPermissions="true"
+            android:exported="true"/>
 
         <activity
             android:name=".JournalEntryDisplayActivity"
@@ -49,6 +50,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="quickjournal.bhupendrashekhawat.me.android.quickjournal.MainActivity" />
         </activity>
+
+        <!-- Receiver for JournalWidgetProvider-->
+
+        <receiver android:name=".widget.JournalWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="quickjournal.bhupendrashekhawat.me.android.quickjournal.ACTION_DATA_UPDATED"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/journal_widget_info" />
+        </receiver>
+
+        <!-- For widget -->
+        <service
+            android:name=".widget.WidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+
     </application>
 
 </manifest>

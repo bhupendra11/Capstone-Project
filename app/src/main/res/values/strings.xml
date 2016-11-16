@@ -38,5 +38,7 @@
     <string name="content_desc_image">Image</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="appwidget_text">My Quick Journal</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
