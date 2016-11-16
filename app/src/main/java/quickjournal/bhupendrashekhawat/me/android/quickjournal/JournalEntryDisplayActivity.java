@@ -40,15 +40,6 @@ public class JournalEntryDisplayActivity extends AppCompatActivity {
         //set custom fonts
         setFonts();
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //get data from intent
@@ -56,7 +47,6 @@ public class JournalEntryDisplayActivity extends AppCompatActivity {
         journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY_MODEL);
 
         getSupportActionBar().setTitle(DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
-
         displayEntry(journalEntryModel);
     }
 

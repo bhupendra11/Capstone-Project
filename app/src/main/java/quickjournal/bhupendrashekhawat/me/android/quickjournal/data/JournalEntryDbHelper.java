@@ -11,11 +11,11 @@ import android.util.Log;
 import java.util.ArrayList;
 
 /**
- * Created by Bhupendra Singh on 24/3/16.
+ * Created by Bhupendra Shekhawat on 24/3/16.
  */
 public class JournalEntryDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     static final String DATABASE_NAME ="journal.db";
 
     public JournalEntryDbHelper(Context context) {
@@ -25,12 +25,21 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        final String SQL_CREATE_TALKSHOW_TABLE ="CREATE TABLE "+ JournalEntryContract.JournalEntry.TABLE_NAME+ " ("+
+        //create Journal Table
+        final String SQL_CREATE_JOURNAL_TABLE ="CREATE TABLE "+ JournalEntryContract.JournalEntry.TABLE_NAME+ " ("+
                     JournalEntryContract.JournalEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     JournalEntryContract.JournalEntry.COLUMN_DATE+" INTEGER UNIQUE, "+
                     JournalEntryContract.JournalEntry.COLUMN_ENTRY +" TEXT);" ;
 
-        db.execSQL(SQL_CREATE_TALKSHOW_TABLE);
+        db.execSQL(SQL_CREATE_JOURNAL_TABLE);
+
+        //create Journal_Image table
+        /*final String SQL_CREATE_JOURNAL_IMAGE_TABLE ="CREATE TABLE "+ JournalEntryContract.JournalImageEntry.TABLE_NAME+ " ("+
+                JournalEntryContract.JournalImageEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                JournalEntryContract.JournalImageEntry.COLUMN_DATE+" INTEGER, "+
+                JournalEntryContract.JournalImageEntry.COLUMN_IMAGE +" TEXT);" ;
+
+        db.execSQL(SQL_CREATE_JOURNAL_IMAGE_TABLE);*/
 
     }
 
@@ -38,6 +47,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS " + JournalEntryContract.JournalEntry.TABLE_NAME);
+       // db.execSQL("DROP TABLE IF EXISTS " + JournalEntryContract.JournalImageEntry.TABLE_NAME);
         onCreate(db);
     }
 

@@ -8,4 +8,6 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="margin_question">16dp</dimen>
+    <dimen name="journal_entry_image_width">320dp</dimen>
+    <dimen name="journal_entry_image_height">240dp</dimen>
 </resources>

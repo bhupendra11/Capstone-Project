@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 /**
  * Created by Bhupendra Singh on 24/3/16.
  *
- * Content Provider for serving the saved favourite talkshow data
+ * Content Provider for serving the saved favourite journal data
  */
 
 
@@ -89,7 +89,7 @@ public class JournalEntryProvider extends ContentProvider{
             case JOURNAL: {
                 long _id = db.insert(JournalEntryContract.JournalEntry.TABLE_NAME, null, values);
                 if( _id >0){
-                    returnUri  = JournalEntryContract.JournalEntry.buildTalkshowUri(_id);
+                    returnUri  = JournalEntryContract.JournalEntry.buildJournalEntryUri(_id);
                 }
                 else{
                     throw new android.database.SQLException("Failed to insert row into "+uri);

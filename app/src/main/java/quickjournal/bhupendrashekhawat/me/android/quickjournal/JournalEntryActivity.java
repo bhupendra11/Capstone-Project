@@ -1,18 +1,24 @@
 package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,19 +30,23 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntriesLoadedEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.ImageHelper;
 
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.convertDateToEpoch;
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.getDisplayDate;
 
-public class JournalEntryActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class JournalEntryActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener {
 
     private final String LOG_TAG = JournalEntryActivity.class.getSimpleName();
     public static final String JOURNAL_ENTRY ="journal_entry";
@@ -46,6 +56,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private long epochDate =0;
     private static String toolbarDate = "JournalEntry";
     private Toolbar toolbar;
+    private ArrayList<byte []> journalImageItems = new ArrayList<>();
 
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
@@ -55,6 +66,13 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
     public static final String EMPTY_STRING="";
 
+    public static final int SELECT_PICTURE = 100;
+
+    public ImageView sampleImageView ;
+    private HorizontalScrollView mJournalEntryImagesScrollView;
+    private ViewGroup mImagesView;
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,18 +81,23 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         toolbar.setTitle("JournalEntry");
         setSupportActionBar(toolbar);
 
+        mContext = this;
         //custom font for quotes textview
         TextView text = (TextView) findViewById(R.id.quote_textview);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
         text.setTypeface(tf);
 
+        sampleImageView = (ImageView) findViewById(R.id.sampleImageView);
+        mJournalEntryImagesScrollView = (HorizontalScrollView) findViewById(R.id.journal_entry_images_container);
+        mImagesView = (ViewGroup) findViewById(R.id.images_layout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent sdintent = new Intent(Intent.ACTION_GET_CONTENT);
+                sdintent.setType("image/*");
+                startActivityForResult(Intent.createChooser(sdintent, "Select Picture"), SELECT_PICTURE);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -114,6 +137,40 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
 
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(LOG_TAG , "onActivityResult called");
+        if (requestCode == SELECT_PICTURE ) {
+            Uri selectedImageUri = data.getData();
+            byte[] inputData = null;
+
+            if(selectedImageUri != null){
+                InputStream iStream = null;
+                try {
+                    iStream = getContentResolver().openInputStream(selectedImageUri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    inputData = ImageHelper.getBytes(iStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Log.d(LOG_TAG , "Inside onActivityResult , bitmap is "+inputData +"Image list size : "+journalImageItems.size() );
+            Bitmap fetchedImage = ImageHelper.getImage(inputData);
+            sampleImageView.setImageBitmap(fetchedImage);
+            if(inputData != null)
+                journalImageItems.add(inputData);
+
+            addTrailers(journalImageItems);
+        }
+    }
+
 
 
     @Override
@@ -157,12 +214,11 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
     public JournalEntryModel saveEntry(){
 
+        Log.d(LOG_TAG, "saveEntry called");
 
         JournalEntryModel curJournalEntryModel = getCurrentJournalEntryModelObj();
-
         //show Toast saying journal entry saved
         Toast.makeText(this, "Journal entry saved !", Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(this, JournalIntentService.class);
         intent.setAction(ACTION_SAVE_JOURNAL_ENTRY);
         intent.putExtra(JOURNAL_ENTRY , curJournalEntryModel);
@@ -196,9 +252,10 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     @Override
     protected void onStop() {
         super.onStop();
+        Log.d(LOG_TAG, "onStop Called");
         EventBus.getDefault().unregister(this);
-        JournalEntryModel savedEntry =  saveEntry();
-        Log.d(LOG_TAG, savedEntry.toString());
+        /*JournalEntryModel savedEntry =  saveEntry();
+        Log.d(LOG_TAG, savedEntry.toString());*/
 
 
 
@@ -207,6 +264,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy Called");
         JournalEntryModel savedEntry =  saveEntry();
         Log.d(LOG_TAG, savedEntry.toString());
 
@@ -393,8 +451,43 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
         journalEntryModel.setTimestamp(epochDate);
 
+
+        boolean hasImages = !journalImageItems.isEmpty();
+        mJournalEntryImagesScrollView .setVisibility(hasImages ? View.VISIBLE : View.GONE);
+        if (hasImages) {
+            addTrailers(journalImageItems);
+        }
+
+        journalEntryModel.setImagesList(journalImageItems);
+
+
         return journalEntryModel;
     }
+
+
+    private void addTrailers(List<byte []> journalImages) {
+        mImagesView.removeAllViews();
+
+
+        //  LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        LayoutInflater inflater = (LayoutInflater) mContext.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+       // Picasso picasso = Picasso.with(getActivity());
+        for (byte[] journalImageByteArray : journalImages) {
+            ViewGroup imagesContainer = (ViewGroup) inflater.inflate(R.layout.journal_entry_image_item, mImagesView, false);
+
+            ImageView journalImage = (ImageView) imagesContainer.findViewById(R.id.journal_image);
+            journalImage.setOnClickListener(this);
+
+            Bitmap imageBitmap = ImageHelper.getImage(journalImageByteArray);
+            journalImage.setImageBitmap(imageBitmap);
+
+            mImagesView.addView(imagesContainer);
+
+        }
+    }
+
 
     public void setFonts(){
         //custom font for quotes textview
@@ -426,5 +519,8 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     }
 
 
+    @Override
+    public void onClick(View v) {
 
+    }
 }
