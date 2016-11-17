@@ -3,8 +3,10 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -19,10 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,
@@ -34,6 +38,9 @@ public class MainActivity extends AppCompatActivity
     private String menuTitles[];
     private Context mContext;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private static final String USER_EMAIL="user_email";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,22 @@ public class MainActivity extends AppCompatActivity
 
         menuTitles = getResources().getStringArray(R.array.drawer_List);
         mContext = this;
+
+        /*Intent intent = getIntent();
+        String user_email = intent.getStringExtra(USER_EMAIL);*/
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String user_email = preferences.getString(USER_EMAIL, "DEFAULT");
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.nav_email_textView);
+        nav_user.setText(user_email);
+
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //initialize adviews
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544~3347511713");
@@ -64,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
 
 

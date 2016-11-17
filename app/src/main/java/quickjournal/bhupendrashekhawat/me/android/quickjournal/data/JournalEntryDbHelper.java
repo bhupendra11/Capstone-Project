@@ -33,13 +33,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
 
         db.execSQL(SQL_CREATE_JOURNAL_TABLE);
 
-        //create Journal_Image table
-        /*final String SQL_CREATE_JOURNAL_IMAGE_TABLE ="CREATE TABLE "+ JournalEntryContract.JournalImageEntry.TABLE_NAME+ " ("+
-                JournalEntryContract.JournalImageEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                JournalEntryContract.JournalImageEntry.COLUMN_DATE+" INTEGER, "+
-                JournalEntryContract.JournalImageEntry.COLUMN_IMAGE +" TEXT);" ;
 
-        db.execSQL(SQL_CREATE_JOURNAL_IMAGE_TABLE);*/
 
     }
 

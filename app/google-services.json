@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "880609310317",
+    "firebase_url": "https://my-quick-journal.firebaseio.com",
+    "project_id": "my-quick-journal",
+    "storage_bucket": "my-quick-journal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880609310317:android:8b59ae1478fcbc72",
+        "android_client_info": {
+          "package_name": "quickjournal.bhupendrashekhawat.me.android.quickjournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880609310317-dmmp9bn0v6lbguev1sh46bb9fndvos23.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "quickjournal.bhupendrashekhawat.me.android.quickjournal",
+            "certificate_hash": "533388607AC8597DEF5502448FA27391F3C155C9"
+          }
+        },
+        {
+          "client_id": "880609310317-smutiq89j4jooj91f6kc3es008jl1lre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTU83Y6t7TQAgjgoTONNcsJCkwgiP5WME"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880609310317-smutiq89j4jooj91f6kc3es008jl1lre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
