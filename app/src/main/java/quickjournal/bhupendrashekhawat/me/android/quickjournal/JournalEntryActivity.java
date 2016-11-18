@@ -87,19 +87,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Courgette-Regular.ttf");
         text.setTypeface(tf);
 
-        sampleImageView = (ImageView) findViewById(R.id.sampleImageView);
-        mJournalEntryImagesScrollView = (HorizontalScrollView) findViewById(R.id.journal_entry_images_container);
-        mImagesView = (ViewGroup) findViewById(R.id.images_layout);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent sdintent = new Intent(Intent.ACTION_GET_CONTENT);
-                sdintent.setType("image/*");
-                startActivityForResult(Intent.createChooser(sdintent, "Select Picture"), SELECT_PICTURE);
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setFonts();
@@ -139,37 +127,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(LOG_TAG , "onActivityResult called");
-        if (requestCode == SELECT_PICTURE ) {
-            Uri selectedImageUri = data.getData();
-            byte[] inputData = null;
 
-            if(selectedImageUri != null){
-                InputStream iStream = null;
-                try {
-                    iStream = getContentResolver().openInputStream(selectedImageUri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    inputData = ImageHelper.getBytes(iStream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            Log.d(LOG_TAG , "Inside onActivityResult , bitmap is "+inputData +"Image list size : "+journalImageItems.size() );
-            Bitmap fetchedImage = ImageHelper.getImage(inputData);
-            sampleImageView.setImageBitmap(fetchedImage);
-            if(inputData != null)
-                journalImageItems.add(inputData);
-
-            addTrailers(journalImageItems);
-        }
-    }
 
 
 
@@ -452,41 +410,12 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         journalEntryModel.setTimestamp(epochDate);
 
 
-        boolean hasImages = !journalImageItems.isEmpty();
-        mJournalEntryImagesScrollView .setVisibility(hasImages ? View.VISIBLE : View.GONE);
-        if (hasImages) {
-            addTrailers(journalImageItems);
-        }
-
-        journalEntryModel.setImagesList(journalImageItems);
-
 
         return journalEntryModel;
     }
 
 
-    private void addTrailers(List<byte []> journalImages) {
-        mImagesView.removeAllViews();
 
-
-        //  LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        LayoutInflater inflater = (LayoutInflater) mContext.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-       // Picasso picasso = Picasso.with(getActivity());
-        for (byte[] journalImageByteArray : journalImages) {
-            ViewGroup imagesContainer = (ViewGroup) inflater.inflate(R.layout.journal_entry_image_item, mImagesView, false);
-
-            ImageView journalImage = (ImageView) imagesContainer.findViewById(R.id.journal_image);
-            journalImage.setOnClickListener(this);
-
-            Bitmap imageBitmap = ImageHelper.getImage(journalImageByteArray);
-            journalImage.setImageBitmap(imageBitmap);
-
-            mImagesView.addView(imagesContainer);
-
-        }
-    }
 
 
     public void setFonts(){

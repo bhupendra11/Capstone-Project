@@ -22,8 +22,6 @@
         <item>Calendar</item>
         <item>Photos</item>
         <item>Settings</item>
-        <item>Rate us</item>
-        <item>Write to us</item>
     </array>
     <string name="title_activity_journal_entry">JournalEntryActivity</string>
 

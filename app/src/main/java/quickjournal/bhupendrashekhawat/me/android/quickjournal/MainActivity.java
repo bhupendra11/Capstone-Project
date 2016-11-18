@@ -7,11 +7,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,11 +24,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,
@@ -38,8 +43,11 @@ public class MainActivity extends AppCompatActivity
     private String menuTitles[];
     private Context mContext;
 
-    private FirebaseAnalytics mFirebaseAnalytics;
+    //for authentication via firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String USER_EMAIL="user_email";
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,22 @@ public class MainActivity extends AppCompatActivity
         menuTitles = getResources().getStringArray(R.array.drawer_List);
         mContext = this;
 
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(LOG_TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(LOG_TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
         /*Intent intent = getIntent();
         String user_email = intent.getStringExtra(USER_EMAIL);*/
 
@@ -63,9 +87,6 @@ public class MainActivity extends AppCompatActivity
         TextView nav_user = (TextView)hView.findViewById(R.id.nav_email_textView);
         nav_user.setText(user_email);
 
-
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //initialize adviews
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544~3347511713");
@@ -178,9 +199,10 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }
+        else if(id == R.id.nav_logout){
+            mAuth.signOut();
+            Toast.makeText(this, "You are  logged out successfully ",Toast.LENGTH_SHORT).show();
 
         }
         else{

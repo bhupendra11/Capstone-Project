@@ -25,20 +25,13 @@ public class JournalEntryModel implements Parcelable {
     private ArrayList<String> amazingThingsHappenedList;
     private String howCouldIHaveMadeTodayBetter;
 
-    private ArrayList<byte[]> imagesList;
+
 
     public JournalEntryModel(){
 
 
     }
 
-    public ArrayList<byte[]> getImagesList() {
-        return imagesList;
-    }
-
-    public void setImagesList(ArrayList<byte[]> imagesList) {
-        this.imagesList = imagesList;
-    }
 
     public ArrayList<String> getGratefulForList() {
         return gratefulForList;
@@ -101,8 +94,7 @@ public class JournalEntryModel implements Parcelable {
         String output = "Quote = "+quote+" dailyAffirmations:  "+dailyAffirmations+"  \n howCouldIHaveMadeTodayBetterList "+howCouldIHaveMadeTodayBetter
                 + "\n gratefulList: " +getGratefulForList().get(0)
                 +"\n makeTodayGreatList  "+ getMakesTodayGreatList().get(0)
-                +"\n amazingThingsHappened "+ getAmazingThingsHappenedList().get(0)
-                +"\n  ImagesListSize " +getImagesList().size();
+                +"\n amazingThingsHappened "+ getAmazingThingsHappenedList().get(0);
         return output;
     }
 
@@ -123,7 +115,7 @@ public class JournalEntryModel implements Parcelable {
         this.dailyAffirmations = journalEntryObj.getDailyAffirmations();
         this.amazingThingsHappenedList = journalEntryObj.getAmazingThingsHappenedList();
         this.howCouldIHaveMadeTodayBetter = journalEntryObj.getHowCouldIHaveMadeTodayBetter();
-        this.imagesList = journalEntryObj.getImagesList();
+
     }
 
 
@@ -150,12 +142,7 @@ public class JournalEntryModel implements Parcelable {
             amazingThingsHappenedList = null;
         }
         howCouldIHaveMadeTodayBetter = in.readString();
-        if (in.readByte() == 0x01) {
-            imagesList = new ArrayList<byte[]>();
-            in.readList(imagesList, byte[].class.getClassLoader());
-        } else {
-            imagesList = null;
-        }
+
     }
 
     @Override
@@ -187,12 +174,7 @@ public class JournalEntryModel implements Parcelable {
             dest.writeList(amazingThingsHappenedList);
         }
         dest.writeString(howCouldIHaveMadeTodayBetter);
-        if (imagesList == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(imagesList);
-        }
+
     }
 
     @SuppressWarnings("unused")
