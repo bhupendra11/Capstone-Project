@@ -2,23 +2,16 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,18 +23,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.ImageHelper;
 
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.convertDateToEpoch;
 import static quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper.getDisplayDate;
@@ -65,13 +54,23 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private static final String ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE ";
 
     public static final String EMPTY_STRING="";
-
-    public static final int SELECT_PICTURE = 100;
-
-    public ImageView sampleImageView ;
-    private HorizontalScrollView mJournalEntryImagesScrollView;
-    private ViewGroup mImagesView;
     private Context mContext;
+
+
+    private static final String[] JOURNAL_COLUMNS = {
+            //Array of all the column names in Journal table
+            JournalEntryContract.JournalEntry.TABLE_NAME + "." + JournalEntryContract.JournalEntry._ID,
+            JournalEntryContract.JournalEntry.COLUMN_DATE,
+            JournalEntryContract.JournalEntry.COLUMN_ENTRY
+    };
+
+    // These indices are tied to JOURNAL_COLUMNS.  If MOVIE_COLUMNS changes, these
+    // must change.
+    public static final int COL_ID = 0;
+    public static final int COL_DATE =1;
+    public static final int COL_ENTRY = 2;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,20 +185,20 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         return curJournalEntryModel;
     }
 
-    public JournalEntryModel updateEntry(){
+    /*public JournalEntryModel updateEntry(){
         JournalEntryModel curJournalEntryModel = getCurrentJournalEntryModelObj();
 
         //show Toast saying journal entry saved
         Toast.makeText(this, "Journal entry updated !", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, JournalIntentService.class);
+        *//*Intent intent = new Intent(this, JournalIntentService.class);
         intent.setAction(ACTION_UPDATE_JOURNAL_ENTRY);
         intent.putExtra(JOURNAL_ENTRY , curJournalEntryModel);
         //intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
-        startService(intent);
+        startService(intent);*//*
 
         return curJournalEntryModel;
-    }
+    }*/
 
     @Override
     protected void onStart() {
@@ -263,14 +262,9 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateEditEntryOnDateChange(JournalEntryEditUpdateOnDateChangeEvent journalEntryEditUpdateOnDateChangeEvent){
 
-
-
         JournalEntryModel journalEntryModel = journalEntryEditUpdateOnDateChangeEvent.getJournalEntryModel();
         Log.d(LOG_TAG, "   updateEditEntryOnDateChange is called with  journalEntryModel :\n " +journalEntryModel);
-
-
-            populateJournalEntry(journalEntryModel);
-
+        populateJournalEntry(journalEntryModel);
 
     }
 
@@ -283,10 +277,20 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
             JournalEntryModel journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY_MODEL);
             epochDate = journalEntryModel.getTimestamp();
+
             populateJournalEntry(journalEntryModel);
-            updateEntry();
+           //updateEntry();
         }
     }
+
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+
 
     public void populateJournalEntry(JournalEntryModel journalEntryModel){
 
@@ -447,9 +451,4 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
     }
 
-
-    @Override
-    public void onClick(View v) {
-
-    }
 }

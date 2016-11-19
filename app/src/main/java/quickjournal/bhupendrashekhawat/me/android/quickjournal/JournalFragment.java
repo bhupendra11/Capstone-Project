@@ -2,10 +2,14 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +20,10 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntriesLoadedEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 
 
@@ -36,28 +35,31 @@ import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalI
  * Use the {@link JournalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JournalFragment extends Fragment {
+public class JournalFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String LOG_TAG = JournalFragment.class.getSimpleName();
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
+    public static final String JOURNAL_ENTRY_DATE ="journal_entry_date";
 
-    private static final String[] Journal_COLUMNS = {
+    private static final String[] JOURNAL_COLUMNS = {
             //Array of all the column names in Journal table
             JournalEntryContract.JournalEntry.TABLE_NAME + "." + JournalEntryContract.JournalEntry._ID,
             JournalEntryContract.JournalEntry.COLUMN_DATE,
             JournalEntryContract.JournalEntry.COLUMN_ENTRY
     };
 
-    // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
+    // These indices are tied to JOURNAL_COLUMNS.  If MOVIE_COLUMNS changes, these
     // must change.
     public static final int COL_ID = 0;
     public static final int COL_DATE =1;
     public static final int COL_ENTRY = 2;
 
+    public static final String SORT_ORDER = JOURNAL_COLUMNS[1] +" "+"DESC";
+    private static final int JOURNAL_LOADER = 0;
 
     private OnFragmentInteractionListener mListener;
-    private JournalAdapter journalAdapter;
+    private JournalCursorAdapter journalAdapter;
     private JournalEntryModel journalEntryModel;
     private ArrayList<JournalEntryModel> journalEntryModelList = new ArrayList<>();
     private ListView listView;
@@ -103,7 +105,12 @@ public class JournalFragment extends Fragment {
 
 
 
-       journalAdapter = new JournalAdapter(getActivity() , this.journalEntryModelList);
+       //journalAdapter = new JournalAdapter(getActivity() , this.journalEntryModelList);
+
+        journalAdapter =  new JournalCursorAdapter(getActivity(),null,0);
+
+
+
 
         listView = (ListView) rootView.findViewById(R.id.journal_entries_list_view);
         listView.setAdapter(journalAdapter);
@@ -113,15 +120,22 @@ public class JournalFragment extends Fragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                journalEntryModel = journalAdapter.getItem(position);
+            public void onItemClick(AdapterView<?>adapterView, View view, int position, long id) {
+
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+
+                if(cursor !=  null){
+
+                }
+
+                String date = cursor.getString(COL_DATE);
+               // journalEntryModel = new JournalEntryModel(cursor);
 
                 Intent displayIntent = new Intent(getActivity() , JournalEntryDisplayActivity.class);
-                displayIntent.putExtra(JOURNAL_ENTRY_MODEL , journalEntryModel);
+                displayIntent.putExtra(JOURNAL_ENTRY_DATE, date);
                 startActivity(displayIntent);
 
               /*  ((Callback) getActivity()).onItemSelected(movie);*/
-
                 //do something
 
 
@@ -132,7 +146,13 @@ public class JournalFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getLoaderManager().initLoader(JOURNAL_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -156,6 +176,24 @@ public class JournalFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        Uri uri = JournalEntryContract.JournalEntry.CONTENT_URI;
+        return new CursorLoader(getActivity(),uri, JOURNAL_COLUMNS,null,null,SORT_ORDER);
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        journalAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        journalAdapter.swapCursor(null);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -173,7 +211,7 @@ public class JournalFragment extends Fragment {
 
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+   /* @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateJournalEntriesList(JournalEntriesLoadedEvent journalEntriesLoadedEvent){
 
         ArrayList<JournalEntryModel> newData = journalEntriesLoadedEvent.getJournalEntryModelsList();
@@ -184,11 +222,11 @@ public class JournalFragment extends Fragment {
         journalEntryModelList.addAll(newData);
         journalAdapter.notifyDataSetChanged();
 
-       /* journalAdapter =  new JournalAdapter(getActivity() , journalEntryModelList);
-        listView.setAdapter(journalAdapter);*/
+       *//* journalAdapter =  new JournalAdapter(getActivity() , journalEntryModelList);
+        listView.setAdapter(journalAdapter);*//*
 
-    }
-
+    }*/
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -200,7 +238,7 @@ public class JournalFragment extends Fragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
 
-    }
+    }*/
 
 
 }

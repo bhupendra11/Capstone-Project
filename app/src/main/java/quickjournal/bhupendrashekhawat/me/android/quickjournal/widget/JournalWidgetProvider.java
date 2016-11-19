@@ -11,12 +11,10 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalAdapter;
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalCursorAdapter;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalEntryDisplayActivity;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.MainActivity;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.R;
-
-import static quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalFragment.JOURNAL_ENTRY_MODEL;
 
 /**
  * Implementation of App Widget functionality.
@@ -103,7 +101,7 @@ public class JournalWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if (JournalAdapter.ACTION_DATA_UPDATED.equals(intent.getAction())) {
+        if (JournalCursorAdapter.ACTION_DATA_UPDATED.equals(intent.getAction())) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                     new ComponentName(context, getClass()));

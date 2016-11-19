@@ -17,7 +17,7 @@
             android:layout_alignParentStart="true"
             android:id="@+id/calendarView" />
 
-        <ListView
+        <!--<ListView
             android:id="@+id/calendar_fragment_journal_entries_list_view"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
@@ -27,7 +27,13 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/string_calendar_fragment_empty_list" />
+            android:text="@string/string_calendar_fragment_empty_list" />-->
+
+        <include
+            android:id="@+id/calendar_fragment_journal_entry_card"
+            layout="@layout/journal_entry_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

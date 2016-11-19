@@ -3,6 +3,7 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal.data;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -24,6 +25,7 @@ public class JournalEntryModel implements Parcelable {
     private String dailyAffirmations;
     private ArrayList<String> amazingThingsHappenedList;
     private String howCouldIHaveMadeTodayBetter;
+
 
 
 
@@ -102,9 +104,15 @@ public class JournalEntryModel implements Parcelable {
     // get JournalEntryModel object from Cursor
     public JournalEntryModel(Cursor cursor) {
 
+        Log.d("JournalEntryModel", "Curson position = "+cursor.getPosition()+"   Cursor column count = "+cursor.getColumnCount() );
+
+
+
+        long date= cursor.getLong(JournalFragment.COL_DATE);
+        String  journalEntryJson = cursor.getString(JournalFragment.COL_ENTRY);
+
         Gson gson = new Gson();
-        long date = cursor.getLong(JournalFragment.COL_DATE);
-        String journalEntryJson = cursor.getString(JournalFragment.COL_ENTRY);
+
 
         JournalEntryModel journalEntryObj = gson.fromJson(journalEntryJson, JournalEntryModel.class);
 

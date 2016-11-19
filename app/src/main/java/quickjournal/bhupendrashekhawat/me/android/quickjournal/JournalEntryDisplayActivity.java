@@ -1,38 +1,63 @@
 package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
-public class JournalEntryDisplayActivity extends AppCompatActivity {
+
+
+public class JournalEntryDisplayActivity extends AppCompatActivity  implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String LOG_TAG = JournalEntryDisplayActivity.class.getSimpleName();
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
+    public static final String JOURNAL_ENTRY_DATE ="journal_entry_date";
+
     private JournalEntryModel journalEntryModel;
     private Toolbar toolbar;
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
     private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
 
 
+    public static final int JOURNAL_ENTRY_LOADER =0;
+
+    private static final String[] JOURNAL_COLUMNS = {
+            //Array of all the column names in Journal table
+            JournalEntryContract.JournalEntry.TABLE_NAME + "." + JournalEntryContract.JournalEntry._ID,
+            JournalEntryContract.JournalEntry.COLUMN_DATE,
+            JournalEntryContract.JournalEntry.COLUMN_ENTRY
+    };
+
+    // These indices are tied to JOURNAL_COLUMNS.  If MOVIE_COLUMNS changes, these
+    // must change.
+    public static final int COL_ID = 0;
+    public static final int COL_DATE =1;
+    public static final int COL_ENTRY = 2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        getSupportLoaderManager().initLoader(JOURNAL_ENTRY_LOADER,null,this);
+
         setContentView(R.layout.activity_journal_entry_display);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,11 +68,11 @@ public class JournalEntryDisplayActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //get data from intent
-        Intent intent = getIntent();
-        journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY_MODEL);
+        /*Intent intent = getIntent();
+        journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY_MODEL);*/
 
-        getSupportActionBar().setTitle(DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
-        displayEntry(journalEntryModel);
+
+       // displayEntry(journalEntryModel);
     }
 
     @Override
@@ -165,5 +190,82 @@ public class JournalEntryDisplayActivity extends AppCompatActivity {
         text5.setTypeface(tf5);
 
 
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        Intent intent = getIntent();
+        if(intent == null){
+            return null;
+        }
+
+        String journalEntryDate = intent.getStringExtra(JOURNAL_ENTRY_DATE);
+        if(journalEntryDate == null){
+            return null;
+        }
+
+        Log.d(LOG_TAG, "Journal date = "+journalEntryDate);
+
+        //String selectionArgs[] = {journalEntryDate};
+
+        String whereNotNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + "= ?";
+        String whereNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + " IS NULL";
+        String[] whereArgs = new String[]{journalEntryDate};
+        CursorLoader cursorLoader = null;
+
+        if(whereArgs == null){
+            cursorLoader =  new CursorLoader(this,
+                    JournalEntryContract.JournalEntry.CONTENT_URI,
+                    null,   //projection
+                    whereNull,  // selectionArgs : gets the rows with this movieID
+                    null ,
+                    null             // Sort order
+
+            );
+        }
+        else{
+            cursorLoader =  new CursorLoader(this,
+                    JournalEntryContract.JournalEntry.CONTENT_URI,
+                    null,   //projection
+                   whereNotNull,
+                    whereArgs,      // selectionArgs : gets the rows with this movieID
+                    null             // Sort order
+
+            );
+        }
+
+
+
+        return cursorLoader;
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+        int size = cursor.getColumnCount();
+
+        Log.d(LOG_TAG , "COlumn count of cursor = "+size + "cursor position = "+ +cursor.getPosition() );
+
+        if(cursor != null) {
+            while (cursor.moveToNext()) {
+                journalEntryModel = new JournalEntryModel(cursor);
+            }
+        }
+
+        if(journalEntryModel != null) {
+            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+        }
+
+        displayEntry(journalEntryModel);
+        getSupportActionBar().setTitle(DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //do nothing
     }
 }
