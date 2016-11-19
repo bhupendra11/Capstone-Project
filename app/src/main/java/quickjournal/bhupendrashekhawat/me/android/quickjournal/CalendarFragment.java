@@ -316,6 +316,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     TextView grateFulOneTextView;
     CardView journalCardView;
     TextView emptytextView;
+    private int cursorCount =0;
 
     public static final String JOURNAL_ENTRY_DATE = "journal_entry_date";
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
@@ -380,7 +381,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
         getLoaderManager().initLoader(CALENDAR_FRAGMENT_LOADER, bundle, this);
 
         Log.d(LOG_TAG , "EpochDate = " +epochDate+"  Current date is "+DateHelper.getDisplayDate(epochDate));
-
 
 
         //For the listView below the calendar view to show journal entries for the selected day
@@ -476,7 +476,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     }
 
 
-    @Override
+   /* @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
@@ -484,7 +484,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
         bundle2.putLong(JOURNAL_ENTRY_DATE , epochDate);
 
         getLoaderManager().restartLoader(CALENDAR_FRAGMENT_LOADER, bundle2, this);
-    }
+    }*/
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -502,6 +502,13 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     public void onStop() {
         super.onStop();
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        emptytextView.setText(R.string.string_calendar_fragment_start);
 
     }
 
@@ -549,7 +556,9 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
        // journalAdapter.swapCursor(cursor);
 
         Log.d(LOG_TAG, "Cursorcount = "+cursor.getCount()) ;
-        if(cursor != null) {
+
+
+        if(cursor != null && cursor.getCount() >0) {
             while (cursor.moveToNext()) {
                 journalEntryModel = new JournalEntryModel(cursor);
             }
