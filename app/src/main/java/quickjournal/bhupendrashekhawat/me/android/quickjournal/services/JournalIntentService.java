@@ -40,8 +40,8 @@ public class JournalIntentService extends IntentService {
 
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
-    private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
-    private static final String ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_JOURNAL_ENTRY_FOR_DATE";
+  //  private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
+    //private static final String ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_JOURNAL_ENTRY_FOR_DATE";
 
     private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
 
@@ -93,10 +93,10 @@ public class JournalIntentService extends IntentService {
                 long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
                 handleActionUpdateEditJournalEntryOnDateChange(journalEntryDate);
             }
-            else if (ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE.equals(action)){
+           /* else if (ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE.equals(action)){
                 long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
                 handleActionFetchJournalEntryForDate(journalEntryDate);
-            }
+            }*/
 
 
         }
@@ -178,7 +178,7 @@ public class JournalIntentService extends IntentService {
     }
 
 
-    public void handleActionFetchJournalEntryForDate(long journalEntryDate){
+    /*public void handleActionFetchJournalEntryForDate(long journalEntryDate){
         JournalEntryModel journalEntryModel = null;
 
         Log.d(LOG_TAG , "Journal Entry to be to fetch for date in calendar fragment " +DateHelper.getDisplayDate(journalEntryDate) );
@@ -223,7 +223,7 @@ public class JournalIntentService extends IntentService {
         EventBus.getDefault().post(new FetchJounalEntryForDateEvent(journalEntryModel));
 
         cursor.close();
-    }
+    }*/
 
 
     /*private void  handleActionUpdateJournalEntry(JournalEntryModel journalEntryModel){

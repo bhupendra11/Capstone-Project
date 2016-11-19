@@ -201,8 +201,19 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if(id == R.id.nav_logout){
-            mAuth.signOut();
-            Toast.makeText(this, "You are  logged out successfully ",Toast.LENGTH_SHORT).show();
+
+            if(mAuth.getCurrentUser() != null){
+                mAuth.signOut();
+                Toast.makeText(this, "You are  logged out successfully ",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, "You are already logged out.Click the login button to log in again. ",Toast.LENGTH_SHORT).show();
+            }
+
+
+            fragmentClass = JournalFragment.newInstance().getClass();
+
+            setTitle(menuTitles[0]);
 
         }
         else{

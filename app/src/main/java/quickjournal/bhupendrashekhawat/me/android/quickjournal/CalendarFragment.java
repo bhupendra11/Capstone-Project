@@ -320,7 +320,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
     public static final String JOURNAL_ENTRY_DATE = "journal_entry_date";
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
-    private static final String ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_JOURNAL_ENTRY_FOR_DATE";
     public static final String LOG_TAG = CalendarFragment.class.getSimpleName();
 
     private static final String[] JOURNAL_COLUMNS = {
@@ -461,10 +460,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
         epochDate = DateHelper.convertDateToEpoch(year,month,dayOfMonth);
 
-        /*Intent intent = new Intent(getActivity(), JournalIntentService.class);
-        intent.setAction(ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE);
-        intent.putExtra( JOURNAL_ENTRY_DATE , epochDate);
-        getActivity().startService(intent);*/
 
 
         Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
@@ -476,15 +471,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     }
 
 
-   /* @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
-        Bundle bundle2 = new Bundle();
-        bundle2.putLong(JOURNAL_ENTRY_DATE , epochDate);
-
-        getLoaderManager().restartLoader(CALENDAR_FRAGMENT_LOADER, bundle2, this);
-    }*/
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
