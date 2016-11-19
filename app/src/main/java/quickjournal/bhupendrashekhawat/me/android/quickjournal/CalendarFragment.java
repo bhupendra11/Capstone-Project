@@ -1,3 +1,4 @@
+/*
 package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Context;
@@ -28,6 +29,7 @@ import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalI
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
 
+*/
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -35,7 +37,8 @@ import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
  * to handle interaction events.
  * Use the {@link CalendarFragment#newInstance} factory method to
  * create an instance of this fragment.
- */
+ *//*
+
 public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener {
     // TODO: Rename parameter arguments, choose names that match
 
@@ -143,7 +146,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
     }
 
-    /**
+    */
+/**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -152,7 +156,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
+     *//*
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -165,9 +170,11 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
         if(journalEntryModel != null){
             Log.d(LOG_TAG , "updateCalendarFragmentListView called with journalEntryModel =  " + journalEntryModel.toString() );
 
-           /* journalEntryModelList.clear();
+           */
+/* journalEntryModelList.clear();
             journalEntryModelList.add(journalEntryModel);
-            journalAdapter.notifyDataSetChanged();*/
+            journalAdapter.notifyDataSetChanged();*//*
+
 
             String displayDate = DateHelper.getDisplayDate(journalEntryModel.getTimestamp());
             dateTextView.setText(displayDate);
@@ -207,6 +214,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
 
 
+*/
 
 
 
@@ -263,7 +271,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
 
 
-/*
 package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Context;
@@ -271,6 +278,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -285,31 +293,15 @@ import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.FetchJounalEntryForDateEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
-import static quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalFragment.COL_DATE;
 
 
-*/
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CalendarFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CalendarFragment#newInstance} factory method to
- * create an instance of this fragment.
- *//*
 
 public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener ,  LoaderManager.LoaderCallbacks<Cursor>  {
     // TODO: Rename parameter arguments, choose names that match
@@ -323,6 +315,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     TextView dateTextView;
     TextView grateFulOneTextView;
     CardView journalCardView;
+    TextView emptytextView;
 
     public static final String JOURNAL_ENTRY_DATE = "journal_entry_date";
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
@@ -380,18 +373,20 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
         dateTextView = (TextView) rootView.findViewById(R.id.date_textview);
         grateFulOneTextView = (TextView) rootView.findViewById(R.id.gratefulone_textview);
         journalCardView  = (CardView) rootView.findViewById(R.id.calendar_fragment_journal_entry_card);
+        emptytextView = (TextView) rootView.findViewById(R.id.empty_card_textview);
+
+        journalCardView.setVisibility(View.GONE);
 
         getLoaderManager().initLoader(CALENDAR_FRAGMENT_LOADER, bundle, this);
 
         Log.d(LOG_TAG , "EpochDate = " +epochDate+"  Current date is "+DateHelper.getDisplayDate(epochDate));
 
-        */
-/*
-        For the listView below the calendar view to show journal entries for the selected day
-         *//*
 
-       */
-/* journalAdapter =  new JournalCursorAdapter(getActivity(),null,0);
+
+        //For the listView below the calendar view to show journal entries for the selected day
+
+
+ /*journalAdapter =  new JournalCursorAdapter(getActivity(),null,0);
 
         listView = (ListView) rootView.findViewById(R.id.calendar_fragment_journal_entries_list_view);
         listView.setAdapter(journalAdapter);
@@ -415,7 +410,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
             }
         } );
-*//*
+*/
 
 
         //for cardview onClick
@@ -466,11 +461,10 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
         epochDate = DateHelper.convertDateToEpoch(year,month,dayOfMonth);
 
-       */
-/* Intent intent = new Intent(getActivity(), JournalIntentService.class);
+        /*Intent intent = new Intent(getActivity(), JournalIntentService.class);
         intent.setAction(ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE);
         intent.putExtra( JOURNAL_ENTRY_DATE , epochDate);
-        getActivity().startService(intent);*//*
+        getActivity().startService(intent);*/
 
 
         Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
@@ -481,17 +475,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
     }
 
-    */
-/**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     *//*
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
+        Bundle bundle2 = new Bundle();
+        bundle2.putLong(JOURNAL_ENTRY_DATE , epochDate);
+
+        getLoaderManager().restartLoader(CALENDAR_FRAGMENT_LOADER, bundle2, this);
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -555,22 +548,29 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
        // journalAdapter.swapCursor(cursor);
 
+        Log.d(LOG_TAG, "Cursorcount = "+cursor.getCount()) ;
         if(cursor != null) {
             while (cursor.moveToNext()) {
                 journalEntryModel = new JournalEntryModel(cursor);
             }
+            if(journalEntryModel != null) {
+                Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+                String displayDate = DateHelper.getDisplayDate(journalEntryModel.getTimestamp());
+                dateTextView.setText(displayDate);
+
+                String titleDisplay = journalEntryModel.getGratefulForList().size() != 0 ?  journalEntryModel.getGratefulForList().get(0) : "Add gratitude";
+
+                grateFulOneTextView.setText(titleDisplay);
+                journalCardView.setVisibility(View.VISIBLE);
+                emptytextView.setVisibility(View.INVISIBLE);
+
+            }
         }
-
-        if(journalEntryModel != null) {
-            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
-            String displayDate = DateHelper.getDisplayDate(journalEntryModel.getTimestamp());
-            dateTextView.setText(displayDate);
-
-            String titleDisplay = journalEntryModel.getGratefulForList().size() != 0 ?  journalEntryModel.getGratefulForList().get(0) : "Add gratitude";
-
-            grateFulOneTextView.setText(titleDisplay);
+        else{
+            journalCardView.setVisibility(View.INVISIBLE);
+            emptytextView.setText(R.string.string_calendar_fragment_empty_list);
+            emptytextView.setVisibility(View.VISIBLE);
         }
-
 
 
 
@@ -583,4 +583,3 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     }
 
 }
-*/
