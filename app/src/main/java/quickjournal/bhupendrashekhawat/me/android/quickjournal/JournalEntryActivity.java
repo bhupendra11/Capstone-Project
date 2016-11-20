@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.services.JournalIntentService;
@@ -264,6 +263,10 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     public void populateJournalEntry(JournalEntryModel journalEntryModel){
 
         GridLayout grateful_gridlayout = (GridLayout) findViewById(R.id.grateful_editext);
+
+        TextView quoteTextView = (TextView) findViewById(R.id.quote_textview);
+        quoteTextView.setText(MotiveQuotes.getQuote());
+
         TextView gratefulLine1 = (TextView) grateful_gridlayout.findViewById(R.id.line1);
         TextView gratefulLine2 = (TextView) grateful_gridlayout.findViewById(R.id.line2);
         TextView gratefulLine3 = (TextView) grateful_gridlayout.findViewById(R.id.line3);
@@ -333,6 +336,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
         GridLayout grateful_gridlayout = (GridLayout) findViewById(R.id.grateful_editext);
         ArrayList<String> gratefulList = new ArrayList<>();
+
 
         EditText gratefulLine1 = (EditText) grateful_gridlayout.findViewById(R.id.line1);
         gratefulList.add(gratefulLine1.getText().toString());

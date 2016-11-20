@@ -96,6 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"
+        android:inputType="textCapSentences|textMultiLine"
         android:hint="Here..."
         android:contentDescription="@string/edit_text_content_description"/>
 
@@ -139,7 +140,7 @@
         android:id="@+id/made_today_better_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="2"
+        android:inputType="textCapSentences|textMultiLine"
         android:hint="Here ..."
         android:contentDescription="@string/edit_text_content_description"/>
 

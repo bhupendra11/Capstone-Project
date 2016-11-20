@@ -17,7 +17,7 @@
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
         android:gravity="center"
-        android:text="1." />
+        android:text="1. " />
 
     <EditText
         android:id="@+id/line1"
@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         grid:layout_columnWeight="16"
         grid:layout_gravity="fill_horizontal"
+        android:inputType="textCapSentences"
 
         />
 
@@ -34,7 +35,8 @@
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
         android:gravity="center"
-        android:text="2." />
+        android:text="2. "
+        android:inputType="textCapSentences"/>
 
     <EditText
         android:id="@+id/line2"
@@ -42,6 +44,7 @@
         android:layout_height="wrap_content"
         grid:layout_columnWeight="16"
         grid:layout_gravity="fill_horizontal"
+        android:inputType="textCapSentences"
      />
 
     <TextView
@@ -50,7 +53,7 @@
         grid:layout_columnWeight="1"
         grid:layout_gravity="fill_horizontal"
         android:gravity="center"
-        android:text="3." />
+        android:text="3. " />
 
     <EditText
         android:id="@+id/line3"
@@ -58,6 +61,7 @@
         android:layout_height="wrap_content"
         grid:layout_columnWeight="16"
         grid:layout_gravity="fill_horizontal"
+        android:inputType="textCapSentences"
 
         />
 

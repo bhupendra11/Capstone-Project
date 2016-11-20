@@ -95,6 +95,9 @@ public class JournalEntryDisplayActivity extends AppCompatActivity  implements a
     public void displayEntry(JournalEntryModel journalEntryModel){
 
         GridLayout grateful_gridlayout = (GridLayout) findViewById(R.id.grateful_tv);
+        TextView quoteTextView = (TextView) findViewById(R.id.quote_tv);
+        quoteTextView.setText(MotiveQuotes.getQuote());
+
         ArrayList<String> gratefulList = journalEntryModel.getGratefulForList();
 
         TextView gratefulLine1 = (TextView) grateful_gridlayout.findViewById(R.id.line1_tv);
