@@ -34,9 +34,22 @@ public class DateHelper {
 
     public static String getDisplayDate(int year, int monthOfYear, int dayOfMonth) {
 
-        String month = new DateFormatSymbols().getMonths()[monthOfYear-1];
+        String[] months = {"Jan",
+                "Feb",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "Aug",
+                "Sept",
+                "Oct",
+                "Nov",
+                "Dec"};
 
-        String output = month+" "+dayOfMonth;
+        String month =  new DateFormatSymbols().getMonths()[monthOfYear-1];
+
+        String output = month+" "+dayOfMonth+", " +year;
         return  output;
     }
 

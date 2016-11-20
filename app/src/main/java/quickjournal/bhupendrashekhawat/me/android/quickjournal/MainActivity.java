@@ -4,6 +4,9 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +16,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,21 +28,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import quickjournal.bhupendrashekhawat.me.android.quickjournal.auth.AuthActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,
         JournalFragment.OnFragmentInteractionListener,
-        CalendarFragment.OnFragmentInteractionListener,
-        PhotosFragment.OnFragmentInteractionListener
+        CalendarFragment.OnFragmentInteractionListener
         {
 
     private String menuTitles[];
@@ -47,6 +59,8 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String USER_EMAIL="user_email";
+    public static final String USER_DISPLAY_NAME ="user_display_name";
+    public static final String USER_PROFILE_PIC_URL ="user_profile_pic_url";
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -75,17 +89,50 @@ public class MainActivity extends AppCompatActivity
                 // ...
             }
         };
-        /*Intent intent = getIntent();
-        String user_email = intent.getStringExtra(USER_EMAIL);*/
+        Intent intent = getIntent();
+        String user_email = intent.getStringExtra(USER_EMAIL);
+        String user_display_name = intent.getStringExtra(USER_DISPLAY_NAME);
+        String user_prof_pic_url = intent.getStringExtra(USER_PROFILE_PIC_URL);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String user_email = preferences.getString(USER_EMAIL, "DEFAULT");
+       /* SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String user_email = preferences.getString(USER_EMAIL, "DEFAULT");*/
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
         TextView nav_user = (TextView)hView.findViewById(R.id.nav_email_textView);
-        nav_user.setText(user_email);
+        if(user_display_name == null || user_display_name.length() <1){
+            nav_user.setText(user_email);
+        }
+        else{
+            nav_user.setText(user_display_name);
+        }
+
+        final ImageView userImageView = (ImageView) hView.findViewById(R.id.user_profile_image);
+
+
+
+        if(user_prof_pic_url != null && userImageView != null){
+            Log.d(LOG_TAG , "Image url = "+ user_prof_pic_url);
+            Picasso.with(this).load(user_prof_pic_url)
+                    .resize(150, 150)
+                    .into(userImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Bitmap imageBitmap = ((BitmapDrawable) userImageView.getDrawable()).getBitmap();
+                            RoundedBitmapDrawable imageDrawable = RoundedBitmapDrawableFactory.create(getResources(), imageBitmap);
+                            imageDrawable.setCircular(true);
+                            imageDrawable.setCornerRadius(Math.max(imageBitmap.getWidth(), imageBitmap.getHeight()) / 2.0f);
+                            userImageView.setImageDrawable(imageDrawable);
+                        }
+
+                        @Override
+                        public void onError() {
+                            userImageView.setImageResource(R.mipmap.ic_launcher);
+                        }
+                    });
+        }
+
 
 
         //initialize adviews
@@ -189,32 +236,24 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        } else if (id == R.id.nav_photos) {
-
-            fragmentClass = PhotosFragment.newInstance().getClass();
-            setTitle(menuTitles[2]);
-
-
-        } else if (id == R.id.nav_settings) {
-
-
 
         }
         else if(id == R.id.nav_logout){
 
-            if(mAuth.getCurrentUser() != null){
-                mAuth.signOut();
-                Toast.makeText(this, "You are  logged out successfully ",Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Toast.makeText(this, "You are already logged out.Click the login button to log in again. ",Toast.LENGTH_SHORT).show();
-            }
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // user is now signed out
+                            startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                            finish();
+                        }
+                    });
 
 
             fragmentClass = JournalFragment.newInstance().getClass();
 
             setTitle(menuTitles[0]);
-
         }
         else{
             fragmentClass = JournalFragment.class;
@@ -230,7 +269,6 @@ public class MainActivity extends AppCompatActivity
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

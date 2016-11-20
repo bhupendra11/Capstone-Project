@@ -3,6 +3,11 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -96,6 +101,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
             remoteViews.setTextViewText(R.id.journal_entry_date_textview, displayDate );
             remoteViews.setTextViewText(R.id.journal_entry_title_textview, titleDisplay);
+           // remoteViews.setImageViewBitmap(R.id.journal_entry_title_textview, buildTextWithFone(titleDisplay));
 
             Intent newIntent = new Intent();
             newIntent.putExtra("date", journalEntryModel.getTimestamp());
@@ -106,6 +112,26 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         }
         return  remoteViews;
     }
+
+/*
+
+    public Bitmap buildTextWithFone(String time)
+    {
+        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_8888);
+        Canvas myCanvas = new Canvas(myBitmap);
+        Paint paint = new Paint();
+        Typeface clock = Typeface.createFromAsset(mContext.getAssets(), "fonts/Courgette-Regular.ttf");
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(true);
+        paint.setTypeface(clock);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(65);
+        paint.setTextAlign(Paint.Align.CENTER);
+        myCanvas.drawText(time, 80, 60, paint);
+        return myBitmap;
+    }
+*/
 
     @Override
     public RemoteViews getLoadingView() {

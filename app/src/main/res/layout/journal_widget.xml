@@ -20,7 +20,7 @@
             android:contentDescription="@string/app_name"
             android:gravity="left"
             android:layout_gravity="center_vertical"
-            android:text="Stock Hawk"
+            android:text="@string/app_name"
             />
     </FrameLayout>
     <FrameLayout

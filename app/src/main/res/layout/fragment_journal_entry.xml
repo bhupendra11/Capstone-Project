@@ -33,6 +33,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="28sp"
         android:layout_gravity="center"
+        android:contentDescription="@string/sample_quote"
         />
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -44,13 +45,15 @@
         android:text="@string/grateful_header_text"
         android:id="@+id/grateful_textview"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:contentDescription="@string/grateful_header_text"
         />
 
     <include
         android:id="@+id/grateful_editext"
         layout="@layout/edit_text_with_numbers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:contentDescription ="@string/edit_text_content_description"/>
 
 
     <android.support.v4.widget.Space
@@ -63,6 +66,7 @@
         android:text="@string/things_to_make_today_great_header_text"
         android:id="@+id/make_today_great_textview"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:contentDescription="@string/things_to_make_today_great_header_text"
         />
 
 
@@ -71,7 +75,8 @@
     android:id="@+id/today_great_editext"
     layout="@layout/edit_text_with_numbers"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:contentDescription = "@string/edit_text_content_description"    />
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -83,6 +88,7 @@
         android:text="@string/my_affirmations_header_text"
         android:id="@+id/my_affirmations_textview"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:contentDescription="@string/my_affirmations_header_text"
         />
 
     <EditText
@@ -90,7 +96,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"
-        android:hint="Here..."/>
+        android:hint="Here..."
+        android:contentDescription="@string/edit_text_content_description"/>
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -102,6 +109,7 @@
         android:text="@string/amazing_things_header_text"
         android:id="@+id/amazing_things_happened_textview"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:contentDescription="@string/amazing_things_header_text"
         />
 
 
@@ -110,7 +118,9 @@
     android:id="@+id/amazing_editext"
     layout="@layout/edit_text_with_numbers"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/edit_text_content_description"
+        />
 
     <android.support.v4.widget.Space
         android:layout_width="1dp"
@@ -122,6 +132,7 @@
         android:text="@string/make_today_even_better_header_text"
         android:id="@+id/made_today_better_textview"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:contentDescription="@string/make_today_even_better_header_text"
         />
 
     <EditText
@@ -129,8 +140,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="2"
-        android:hint="Here ..."/>
+        android:hint="Here ..."
+        android:contentDescription="@string/edit_text_content_description"/>
 
+<!--
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
@@ -161,6 +174,7 @@
 
 
     </HorizontalScrollView>
+-->
 
 </LinearLayout>
 </ScrollView>

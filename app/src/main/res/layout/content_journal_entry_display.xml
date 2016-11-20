@@ -34,6 +34,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="28sp"
             android:layout_gravity="center"
+            android:contentDescription="@string/sample_quote"
             />
         <android.support.v4.widget.Space
             android:layout_width="1dp"
@@ -46,13 +47,16 @@
             android:id="@+id/grateful_qtv"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_margin="@dimen/margin_question"
+            android:contentDescription="@string/grateful_header_text"
             />
 
         <include
             android:id="@+id/grateful_tv"
             layout="@layout/text_view_with_numbers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/text_view_content_description"
+            />
 
 
        <!-- <android.support.v4.widget.Space
@@ -75,6 +79,7 @@
             android:id="@+id/make_today_great_qtv"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_margin="@dimen/margin_question"
+            android:contentDescription="@string/things_to_make_today_great_header_text"
             />
 
 
@@ -82,7 +87,8 @@
             android:id="@+id/today_great_tv"
             layout="@layout/text_view_with_numbers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/text_view_content_description"/>
 
         <!--<android.support.v4.widget.Space
             android:layout_width="1dp"
@@ -103,6 +109,7 @@
             android:id="@+id/my_affirmations_qtv"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_margin="@dimen/margin_question"
+            android:contentDescription="@string/my_affirmations_header_text"
             />
 
         <TextView
@@ -112,6 +119,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:minLines="2"
             android:layout_margin="8dp"
+            android:contentDescription="@string/text_view_content_description"
             />
 
         <!--<android.support.v4.widget.Space
@@ -134,13 +142,15 @@
             android:id="@+id/amazing_things_happened_qtv"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_margin="@dimen/margin_question"
+            android:contentDescription="@string/amazing_things_header_text"
             />
 
         <include
             android:id="@+id/amazing_tv"
             layout="@layout/text_view_with_numbers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/text_view_content_description"/>
 
         <View
             android:layout_width="fill_parent"
@@ -158,6 +168,7 @@
             android:id="@+id/made_today_better_qtv"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_margin="@dimen/margin_question"
+            android:contentDescription="@string/make_today_even_better_header_text"
             />
 
         <TextView
@@ -167,7 +178,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:minLines="2"
             android:layout_margin="8dp"
-            android:hint="Here ..."/>
+            android:hint="Here ..."
+            android:contentDescription="@string/text_view_content_description"/>
 
 
     </LinearLayout>

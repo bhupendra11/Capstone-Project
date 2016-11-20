@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
@@ -25,6 +26,10 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final int RC_SIGN_IN = 9001;
     private CoordinatorLayout coordinatorLayout;
+    public static final String USER_EMAIL="user_email";
+    public static final String USER_DISPLAY_NAME ="user_display_name";
+    public static final String USER_PROFILE_PIC_URL ="user_profile_pic_url";
+    public static final String LOG_TAG= AuthActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,17 @@ public class AuthActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             // already signed in
+            String userMail  = mAuth.getCurrentUser().getEmail();
+            Log.d(LOG_TAG, "Usermail is "+userMail);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(USER_DISPLAY_NAME, mAuth.getCurrentUser().getDisplayName());
+            intent.putExtra(USER_EMAIL, userMail);
+            if(mAuth.getCurrentUser().getPhotoUrl() != null)
+                    intent.putExtra(USER_PROFILE_PIC_URL, mAuth.getCurrentUser().getPhotoUrl().toString());
+
+
+            startActivity(intent);
+            finish();
 
         } else {
             // not signed in
@@ -51,6 +67,8 @@ public class AuthActivity extends AppCompatActivity {
                         .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
                                 new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                         .setIsSmartLockEnabled(false)
+                        .setTheme(R.style.AppTheme)
+                        .setLogo(R.drawable.ic_app)
                         .build(),
                 RC_SIGN_IN);
     }
@@ -59,7 +77,15 @@ public class AuthActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             // user is signed in!
-            startActivity(new Intent(this, MainActivity.class));
+            String userMail  = mAuth.getCurrentUser().getEmail();
+            Log.d(LOG_TAG, "Usermail is "+userMail);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(USER_DISPLAY_NAME, mAuth.getCurrentUser().getDisplayName());
+            intent.putExtra(USER_EMAIL, userMail);
+            if(mAuth.getCurrentUser().getPhotoUrl() != null)
+                intent.putExtra(USER_PROFILE_PIC_URL, mAuth.getCurrentUser().getPhotoUrl().toString());
+
+            startActivity(intent);
             finish();
             return;
         }

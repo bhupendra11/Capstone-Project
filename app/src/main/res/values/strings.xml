@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuickJournal</string>
+    <string name="app_name">Quick Journal</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -22,8 +22,8 @@
     <array name="drawer_List">
         <item>Journal</item>
         <item>Calendar</item>
-        <item>Photos</item>
         <item>Settings</item>
+        <item>Logout</item>
     </array>
     <string name="title_activity_journal_entry">JournalEntryActivity</string>
 
@@ -38,12 +38,20 @@
     <string name="content_desc_image">Image</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="appwidget_text">My Quick Journal</string>
     <string name="add_widget">Add widget</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="title_activity_auth">AuthActivity</string>
     <string name="sign_in_cancelled">The sign in attempt was cancelled.</string>
     <string name="no_internet_connection">No Internet connection. Pleasy try again!</string>
+
+
+    <string name="edit_text_content_description">Input data here</string>
+    <string name="text_view_content_description">Your input entries here</string>
+    <string name="calendar_view_desc">Calendar view to choose date</string>
+    <string name="card_to_show_journal_entry">Card to show journal entry for selected day</string>
+    <string name="journal_entries_list">journal_entries_list</string>
+    <string name="date_view">date_view</string>
+    <string name="greeting">Hi,</string>
 
 </resources>

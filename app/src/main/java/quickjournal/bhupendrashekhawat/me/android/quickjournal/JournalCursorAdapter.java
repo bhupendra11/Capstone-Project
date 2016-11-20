@@ -2,6 +2,7 @@ package quickjournal.bhupendrashekhawat.me.android.quickjournal;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +62,10 @@ public class JournalCursorAdapter extends CursorAdapter {
 
         String displayDate = DateHelper.getDisplayDate(journalEntryModel.getTimestamp());
         viewHolder.dateTextView.setText(displayDate);
+
+       // TextView text1 = (TextView) findViewById(R.id.grateful_textview);
+        Typeface tf1 = Typeface.createFromAsset(context.getAssets(), "fonts/Courgette-Regular.ttf");
+        viewHolder.dateTextView.setTypeface(tf1);
 
         String titleDisplay = journalEntryModel.getGratefulForList().size() != 0 ?  journalEntryModel.getGratefulForList().get(0) : "Add gratitude";
 

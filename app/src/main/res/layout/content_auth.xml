@@ -13,4 +13,6 @@
     tools:context="quickjournal.bhupendrashekhawat.me.android.quickjournal.auth.AuthActivity"
     tools:showIn="@layout/activity_auth">
 
+
+
 </RelativeLayout>

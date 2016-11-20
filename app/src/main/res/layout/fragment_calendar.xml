@@ -15,7 +15,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/calendarView" />
+            android:id="@+id/calendarView"
+            android:contentDescription="@string/calendar_view_desc"/>
 
 
         <FrameLayout
@@ -34,7 +35,8 @@
                 layout="@layout/journal_entry_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:contentDescription="@string/card_to_show_journal_entry"/>
 
 
         </FrameLayout>
