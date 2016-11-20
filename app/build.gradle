@@ -37,32 +37,29 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //to add rich edit text
 
-    //event bus greenrobot
-
-    //for ads
-
-    //used two services google
-    // 1. Google Ads
-
-    // 2. Authentication by google firebase
-
-    // FirebaseUI Auth only
-
-    //Picasso for displaying user Profile Image
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:gridlayout-v7:24.2.1'
     compile 'com.google.code.gson:gson:2.3.1'
+
+    //material date picker
     compile 'com.wdullaer:materialdatetimepicker:2.5.0'
+
+    //event bus greenrobot
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:cardview-v7:24.2.1'
+
+    //used two services google
+    // 1. Google Ads
+    // 2. Authentication by google firebase
     compile 'com.google.firebase:firebase-ads:9.8.0'
     compile 'com.google.firebase:firebase-core:9.8.0'
     compile 'com.google.firebase:firebase-auth:9.8.0'
     compile 'com.firebaseui:firebase-ui-auth:1.0.0'
+
+    //For displaying user profile image for google accounts
     compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
 }
