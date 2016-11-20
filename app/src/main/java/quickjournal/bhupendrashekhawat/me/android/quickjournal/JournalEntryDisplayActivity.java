@@ -37,19 +37,6 @@ public class JournalEntryDisplayActivity extends AppCompatActivity  implements a
 
     public static final int JOURNAL_ENTRY_LOADER =0;
 
-    private static final String[] JOURNAL_COLUMNS = {
-            //Array of all the column names in Journal table
-            JournalEntryContract.JournalEntry.TABLE_NAME + "." + JournalEntryContract.JournalEntry._ID,
-            JournalEntryContract.JournalEntry.COLUMN_DATE,
-            JournalEntryContract.JournalEntry.COLUMN_ENTRY
-    };
-
-    // These indices are tied to JOURNAL_COLUMNS.  If MOVIE_COLUMNS changes, these
-    // must change.
-    public static final int COL_ID = 0;
-    public static final int COL_DATE =1;
-    public static final int COL_ENTRY = 2;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

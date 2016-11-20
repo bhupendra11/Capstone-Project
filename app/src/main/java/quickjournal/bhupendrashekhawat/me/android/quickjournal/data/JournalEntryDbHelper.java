@@ -41,7 +41,7 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS " + JournalEntryContract.JournalEntry.TABLE_NAME);
-       // db.execSQL("DROP TABLE IF EXISTS " + JournalEntryContract.JournalImageEntry.TABLE_NAME);
+
         onCreate(db);
     }
 

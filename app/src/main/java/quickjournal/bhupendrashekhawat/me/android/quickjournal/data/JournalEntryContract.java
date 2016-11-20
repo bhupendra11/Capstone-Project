@@ -16,7 +16,6 @@ public class JournalEntryContract {
     public static final Uri BASE_CONTENT_URL =  Uri.parse("content://"+CONTENT_AUTHORITY);
 
     public static final String PATH_JOURNAL = "journal";
-    public static final String PATH_JOURNAL_IMAGE = "journal_images";
 
 
     public static final class JournalEntry implements BaseColumns{
@@ -42,25 +41,5 @@ public class JournalEntryContract {
 
     }
 
-   /* public static final class JournalImageEntry implements BaseColumns{
 
-        public static final Uri CONTENT_URI = BASE_CONTENT_URL.buildUpon().appendPath(PATH_JOURNAL_IMAGE).build();
-
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +"/" +CONTENT_AUTHORITY +"/" +PATH_JOURNAL_IMAGE;
-
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +"/" +CONTENT_AUTHORITY +"/" +PATH_JOURNAL_IMAGE;
-
-        public static  final String TABLE_NAME = "journal_image";
-
-
-        public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_IMAGE = "image";
-
-        public static Uri buildJournalEntryImageUri(long id){
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
-
-
-
-    }*/
 }

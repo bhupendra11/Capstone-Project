@@ -56,50 +56,49 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if(mAuth.getCurrentUser() != null){
-
+        if(mAuth.getCurrentUser() != null){ //already signed in
 
             saveUserInPrefeerences(mAuth.getCurrentUser().getEmail());
-
-
             Intent intent = new Intent(mContext, MainActivity.class);
             intent.putExtra(USER_EMAIL, email);
             startActivity(intent);
         }
+        else {  //sign in
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) {
+                        // User is signed in
+                        Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    } else {
+                        // User is signed out
+                        Log.d(TAG, "onAuthStateChanged:signed_out");
+                    }
+                    // ...
                 }
-                // ...
-            }
-        };
+            };
 
 
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            mLoginButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    login();
+                }
+            });
 
-        mSignupLink.setOnClickListener(new View.OnClickListener() {
+            mSignupLink.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    // Start the Signup activity
+                    Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                    startActivityForResult(intent, REQUEST_SIGNUP);
+                }
+            });
+        }
     }
 
     public void login() {

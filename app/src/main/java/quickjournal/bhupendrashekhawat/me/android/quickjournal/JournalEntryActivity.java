@@ -45,31 +45,14 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     private long epochDate =0;
     private static String toolbarDate = "JournalEntry";
     private Toolbar toolbar;
-    private ArrayList<byte []> journalImageItems = new ArrayList<>();
 
     public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
-    private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
     private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
     private static final String ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE ";
 
     public static final String EMPTY_STRING="";
     private Context mContext;
-
-
-    private static final String[] JOURNAL_COLUMNS = {
-            //Array of all the column names in Journal table
-            JournalEntryContract.JournalEntry.TABLE_NAME + "." + JournalEntryContract.JournalEntry._ID,
-            JournalEntryContract.JournalEntry.COLUMN_DATE,
-            JournalEntryContract.JournalEntry.COLUMN_ENTRY
-    };
-
-    // These indices are tied to JOURNAL_COLUMNS.  If MOVIE_COLUMNS changes, these
-    // must change.
-    public static final int COL_ID = 0;
-    public static final int COL_DATE =1;
-    public static final int COL_ENTRY = 2;
-
 
 
     @Override
@@ -185,20 +168,6 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         return curJournalEntryModel;
     }
 
-    /*public JournalEntryModel updateEntry(){
-        JournalEntryModel curJournalEntryModel = getCurrentJournalEntryModelObj();
-
-        //show Toast saying journal entry saved
-        Toast.makeText(this, "Journal entry updated !", Toast.LENGTH_SHORT).show();
-
-        *//*Intent intent = new Intent(this, JournalIntentService.class);
-        intent.setAction(ACTION_UPDATE_JOURNAL_ENTRY);
-        intent.putExtra(JOURNAL_ENTRY , curJournalEntryModel);
-        //intent.putExtra(JOURNAL_ENTRY_DATE, epochDate);
-        startService(intent);*//*
-
-        return curJournalEntryModel;
-    }*/
 
     @Override
     protected void onStart() {

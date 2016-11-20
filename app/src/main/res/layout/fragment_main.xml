@@ -5,10 +5,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context="quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalFragment">
 
-    <!--<TextView
-      android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="Main Activity"/>-->
+
 
     <ListView
         android:id="@+id/journal_entries_list_view"

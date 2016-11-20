@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryContract;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntryModel;
-import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.FetchJounalEntryForDateEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.events.JournalEntryEditUpdateOnDateChangeEvent;
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.util.DateHelper;
 
@@ -40,11 +39,6 @@ public class JournalIntentService extends IntentService {
 
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SAVE_JOURNAL_ENTRY= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.SAVE_JOURNAL_ENTRY";
-  //  private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
-    //private static final String ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_JOURNAL_ENTRY_FOR_DATE";
-
-    private static final String ACTION_UPDATE_JOURNAL_ENTRY = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_JOURNAL_ENTRY";
-
     private static final String ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE = "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE ";
 
     private ArrayList<JournalEntryModel> mJournalEntriesist = new ArrayList<JournalEntryModel>();
@@ -81,28 +75,13 @@ public class JournalIntentService extends IntentService {
                 JournalEntryModel journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY);
                 long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
                 handleActionSaveJournalEntry(journalEntryModel,journalEntryDate);
-            } /*else if (ACTION_FETCH_ALL_JOURNAL_ENTRIES.equals(action)) {
-                //do something
-                handleActionFetchAllJournalEntries();
-            }*/
-            /*else if(ACTION_UPDATE_JOURNAL_ENTRY.equals(action)){
-                JournalEntryModel journalEntryModel = intent.getParcelableExtra(JOURNAL_ENTRY);
-                handleActionUpdateJournalEntry(journalEntryModel);
-            }*/
+            }
             else if(ACTION_UPDATE_EDIT_JOURNAL_ENTRY_ON_DATE_CHANGE.equals(action)){
                 long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
                 handleActionUpdateEditJournalEntryOnDateChange(journalEntryDate);
             }
-           /* else if (ACTION_FETCH_JOURNAL_ENTRY_FOR_DATE.equals(action)){
-                long journalEntryDate = intent.getLongExtra(JOURNAL_ENTRY_DATE,0);
-                handleActionFetchJournalEntryForDate(journalEntryDate);
-            }*/
-
 
         }
-
-
-
     }
 
 
@@ -112,8 +91,6 @@ public class JournalIntentService extends IntentService {
         int numRows =0;
 
         //handle the saving in DB here
-
-
         //serialize json and store as string
 
         String journalEntryJson = gson.toJson(journalEntryModel);
@@ -174,103 +151,10 @@ public class JournalIntentService extends IntentService {
 
         Log.d(LOG_TAG , "Diary Entry saved in db at URI : "+insertedUri);
 
-        //Toast.makeText(mContext,"Diary Entry saved in db ",Toast.LENGTH_SHORT);
+
     }
 
 
-    /*public void handleActionFetchJournalEntryForDate(long journalEntryDate){
-        JournalEntryModel journalEntryModel = null;
-
-        Log.d(LOG_TAG , "Journal Entry to be to fetch for date in calendar fragment " +DateHelper.getDisplayDate(journalEntryDate) );
-
-        String whereNotNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + "= ?";
-        String whereNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + " IS NULL";
-        String[] whereArgs = new String[]{Long.toString(journalEntryDate)};
-        Cursor cursor;
-        if(whereArgs == null){
-             cursor = mContext.getContentResolver().query(
-                    JournalEntryContract.JournalEntry.CONTENT_URI,
-                    null,   //projection
-                    whereNull,
-                    null,      // selectionArgs : gets the rows with this movieID
-                    null             // Sort order
-
-            );
-        }
-        else{
-             cursor = mContext.getContentResolver().query(
-                    JournalEntryContract.JournalEntry.CONTENT_URI,
-                    null,   //projection
-                    whereNotNull,
-                    whereArgs,      // selectionArgs : gets the rows with this movieID
-                    null             // Sort order
-
-            );
-        }
-
-
-
-        if(cursor != null) {
-            while (cursor.moveToNext()) {
-                journalEntryModel = new JournalEntryModel(cursor);
-            }
-        }
-
-        if(journalEntryModel != null) {
-            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
-        }
-
-        EventBus.getDefault().post(new FetchJounalEntryForDateEvent(journalEntryModel));
-
-        cursor.close();
-    }*/
-
-
-    /*private void  handleActionUpdateJournalEntry(JournalEntryModel journalEntryModel){
-
-        long journalEntryDate = journalEntryModel.getTimestamp();
-
-        Log.d(LOG_TAG , "Journal Entry to be fetched for date " +journalEntryDate );
-        int numRows =0;
-        Cursor cursor = mContext.getContentResolver().query(
-                JournalEntryContract.JournalEntry.CONTENT_URI,
-                null,   //projection
-                JournalEntryContract.JournalEntry.COLUMN_DATE + " =?",
-                new String[]{Long.toString(journalEntryDate)},      // selectionArgs : gets the rows with this movieID
-                null             // Sort order
-
-        );
-
-        if (cursor != null) {
-            numRows = cursor.getCount();
-        }
-
-      //  JournalEntryModel journalEntryModel=  null;
-        if (numRows == 1) {    // Fetch that row as JournalEntryModel object
-
-            if(cursor != null) {
-                while (cursor.moveToNext()) {
-                    journalEntryModel = new JournalEntryModel(cursor);
-                    String journalEntryJson = gson.toJson(journalEntryModel);
-                    ContentValues values = new ContentValues();
-                    values.put(JournalEntryContract.JournalEntry.COLUMN_DATE, journalEntryDate);
-                    values.put(JournalEntryContract.JournalEntry.COLUMN_ENTRY, journalEntryJson);
-
-                    int update  = mContext.getContentResolver().update(JournalEntryContract.JournalEntry.CONTENT_URI,values,
-                            JournalEntryContract.JournalEntry.COLUMN_DATE + " =?",
-                            new String[]{Long.toString(journalEntryModel.getTimestamp())});
-
-                    Log.d(LOG_TAG, "Tried to update journal entry  , Result : "+update+" At date = "+DateHelper.getDisplayDate(journalEntryModel.getTimestamp()));
-
-
-                }
-            }
-
-        }
-
-
-        cursor.close();
-    }*/
 
 
     public void  handleActionUpdateEditJournalEntryOnDateChange(long journalEntryDate){

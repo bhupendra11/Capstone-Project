@@ -46,31 +46,6 @@ public class JournalEntryProvider extends ContentProvider{
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
-        String a  = (selection ==null)? "null" :selection;
-        String b = (selectionArgs== null) ? "null" :selectionArgs[0];
-        String c = (uri == null) ? "null" : uri.toString();
-
-       // String selectionModified = selection;
-
-        Log.d("JournalEntryProvider",
-                "Uri = "
-                + c
-                + " : Selection = "+ a
-                +"  : Selection args = "+ b +" ");
-
-
-        /*if(selectionArgs == null){
-            Log.d("JournalEntryProvider","Inside");
-            selection = JournalEntryContract.JournalEntry.COLUMN_DATE  + " IS NULL";
-        }*/
-
-        Log.d("JournalEntryProvider",
-                "Uri = "
-                        + c
-                        + " : Selection = "+ selection
-                        +"  : Selection args = "+ selectionArgs +" ");
-
-
         Cursor retCursor ;
         if(JOURNAL == sUriMatcher.match(uri)){
             retCursor  =  mOpenHelper.getReadableDatabase().query(

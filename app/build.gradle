@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "quickjournal.bhupendrashekhawat.me.android.quickjournal"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,9 @@ android {
 repositories {
     maven {
         url "https://s3.amazonaws.com/repo.commonsware.com"
+    }
+    maven{
+        url 'https://maven.fabric.io/public'
     }
 }
 
@@ -60,6 +63,10 @@ dependencies {
     // 2. Authentication by google firebase
     compile 'com.google.firebase:firebase-auth:9.8.0'
     testCompile 'junit:junit:4.12'
+
+
+    // FirebaseUI Auth only
+    compile 'com.firebaseui:firebase-ui-auth:1.0.0'
 }
 
 

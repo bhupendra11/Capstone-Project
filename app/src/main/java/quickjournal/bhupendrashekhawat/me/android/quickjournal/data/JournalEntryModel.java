@@ -8,7 +8,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import quickjournal.bhupendrashekhawat.me.android.quickjournal.JournalFragment;
 
@@ -26,14 +25,9 @@ public class JournalEntryModel implements Parcelable {
     private ArrayList<String> amazingThingsHappenedList;
     private String howCouldIHaveMadeTodayBetter;
 
-
-
-
     public JournalEntryModel(){
 
-
     }
-
 
     public ArrayList<String> getGratefulForList() {
         return gratefulForList;

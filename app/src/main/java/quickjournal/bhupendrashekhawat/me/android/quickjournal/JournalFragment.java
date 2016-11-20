@@ -39,7 +39,6 @@ public class JournalFragment extends Fragment implements LoaderManager.LoaderCal
 
     public static final String LOG_TAG = JournalFragment.class.getSimpleName();
     private static final String ACTION_FETCH_ALL_JOURNAL_ENTRIES= "quickjournal.bhupendrashekhawat.me.android.quickjournal.services.action.FETCH_ALL_JOURNAL_ENTRIES";
-    public static final String JOURNAL_ENTRY_MODEL ="joural_entry_model";
     public static final String JOURNAL_ENTRY_DATE ="journal_entry_date";
 
     private static final String[] JOURNAL_COLUMNS = {
@@ -60,8 +59,6 @@ public class JournalFragment extends Fragment implements LoaderManager.LoaderCal
 
     private OnFragmentInteractionListener mListener;
     private JournalCursorAdapter journalAdapter;
-    private JournalEntryModel journalEntryModel;
-    private ArrayList<JournalEntryModel> journalEntryModelList = new ArrayList<>();
     private ListView listView;
 
     public JournalFragment() {
@@ -103,14 +100,7 @@ public class JournalFragment extends Fragment implements LoaderManager.LoaderCal
         intent.setAction(ACTION_FETCH_ALL_JOURNAL_ENTRIES);
         getActivity().startService(intent);
 
-
-
-       //journalAdapter = new JournalAdapter(getActivity() , this.journalEntryModelList);
-
         journalAdapter =  new JournalCursorAdapter(getActivity(),null,0);
-
-
-
 
         listView = (ListView) rootView.findViewById(R.id.journal_entries_list_view);
         listView.setAdapter(journalAdapter);
@@ -134,9 +124,6 @@ public class JournalFragment extends Fragment implements LoaderManager.LoaderCal
                 Intent displayIntent = new Intent(getActivity() , JournalEntryDisplayActivity.class);
                 displayIntent.putExtra(JOURNAL_ENTRY_DATE, date);
                 startActivity(displayIntent);
-
-              /*  ((Callback) getActivity()).onItemSelected(movie);*/
-                //do something
 
 
             }
@@ -208,37 +195,6 @@ public class JournalFragment extends Fragment implements LoaderManager.LoaderCal
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-
-
-   /* @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateJournalEntriesList(JournalEntriesLoadedEvent journalEntriesLoadedEvent){
-
-        ArrayList<JournalEntryModel> newData = journalEntriesLoadedEvent.getJournalEntryModelsList();
-
-        Log.d(LOG_TAG , "updateJournalEntriesList called , ListSize = " +journalEntryModelList.size());
-
-        journalEntryModelList.clear();
-        journalEntryModelList.addAll(newData);
-        journalAdapter.notifyDataSetChanged();
-
-       *//* journalAdapter =  new JournalAdapter(getActivity() , journalEntryModelList);
-        listView.setAdapter(journalAdapter);*//*
-
-    }*/
-/*
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-
-    }*/
 
 
 }

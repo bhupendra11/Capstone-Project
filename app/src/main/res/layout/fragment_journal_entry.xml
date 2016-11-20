@@ -65,11 +65,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 
-   <!-- <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minLines="2"
-        android:hint="Here ..."/>-->
+
 
     <include
     android:id="@+id/today_great_editext"
@@ -108,11 +104,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 
-    <!--<EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minLines="2"
-        android:hint="Here..."/>-->
+
 
     <include
     android:id="@+id/amazing_editext"
