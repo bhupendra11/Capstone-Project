@@ -27,20 +27,20 @@ calendar view.
 
 ##Screenshots
 
-### Login Screen
+### 1. Login Screen :
 ![a](https://cloud.githubusercontent.com/assets/6179888/20642692/a488cb3e-b43b-11e6-94d3-3bc925aab08f.png)
 
-### Journal Entry List
+### 2. Journal Entry List :
 ![b](https://cloud.githubusercontent.com/assets/6179888/20642697/a5461dec-b43b-11e6-9650-7a08f7f32ccf.png)
 
-### Navigaton Drawer
+### 3. Navigaton Drawer :
 ![c](https://cloud.githubusercontent.com/assets/6179888/20642693/a4ea16aa-b43b-11e6-8344-80c6bea43b5f.png)
 
-### Screen to create a new Journal Entry
+### 4. Screen to create a new Journal Entry :
 ![d](https://cloud.githubusercontent.com/assets/6179888/20642695/a4f17df0-b43b-11e6-8d95-cb82c8d05624.png)
 
-### Select date for journal Entry
+### 5. Select date for journal Entry :
 ![e](https://cloud.githubusercontent.com/assets/6179888/20642694/a4f0fed4-b43b-11e6-899c-f6f03f50830b.png)
 
-### Search previous journal entries by date
+### 6. Search previous journal entries by date :
 ![f](https://cloud.githubusercontent.com/assets/6179888/20642696/a4f50ac4-b43b-11e6-8d83-b42b7a5cca0c.png)
