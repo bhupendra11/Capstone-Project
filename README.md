@@ -23,3 +23,24 @@ The main features of the app are:
 * A diary entry consists of a set of questions that the user answers daily.
 * The calendar screen allows the user to view entry by selecting the date from the
 calendar view.
+
+
+##Screenshots
+
+### Login Screen
+![a](https://cloud.githubusercontent.com/assets/6179888/20642692/a488cb3e-b43b-11e6-94d3-3bc925aab08f.png)
+
+### Journal Entry List
+![b](https://cloud.githubusercontent.com/assets/6179888/20642697/a5461dec-b43b-11e6-9650-7a08f7f32ccf.png)
+
+### Navigaton Drawer
+![c](https://cloud.githubusercontent.com/assets/6179888/20642693/a4ea16aa-b43b-11e6-8344-80c6bea43b5f.png)
+
+### Screen to create a new Journal Entry
+![d](https://cloud.githubusercontent.com/assets/6179888/20642695/a4f17df0-b43b-11e6-8d95-cb82c8d05624.png)
+
+### Select date for journal Entry
+![e](https://cloud.githubusercontent.com/assets/6179888/20642694/a4f0fed4-b43b-11e6-899c-f6f03f50830b.png)
+
+### Search previous journal entries by date
+![f](https://cloud.githubusercontent.com/assets/6179888/20642696/a4f50ac4-b43b-11e6-8d83-b42b7a5cca0c.png)
