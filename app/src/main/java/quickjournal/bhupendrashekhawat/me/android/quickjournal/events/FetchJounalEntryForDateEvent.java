@@ -9,11 +9,9 @@ import quickjournal.bhupendrashekhawat.me.android.quickjournal.data.JournalEntry
 public class FetchJounalEntryForDateEvent {
 
     private JournalEntryModel journalEntryModel;
-
     public FetchJounalEntryForDateEvent (JournalEntryModel journalEntryModel){
         this.journalEntryModel = journalEntryModel;
     }
-
     public JournalEntryModel getJournalEntryModel() {
         return journalEntryModel;
     }

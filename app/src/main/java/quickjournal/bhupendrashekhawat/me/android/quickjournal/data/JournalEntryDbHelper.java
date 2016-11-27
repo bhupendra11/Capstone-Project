@@ -32,16 +32,12 @@ public class JournalEntryDbHelper extends SQLiteOpenHelper {
                     JournalEntryContract.JournalEntry.COLUMN_ENTRY +" TEXT);" ;
 
         db.execSQL(SQL_CREATE_JOURNAL_TABLE);
-
-
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS " + JournalEntryContract.JournalEntry.TABLE_NAME);
-
         onCreate(db);
     }
 

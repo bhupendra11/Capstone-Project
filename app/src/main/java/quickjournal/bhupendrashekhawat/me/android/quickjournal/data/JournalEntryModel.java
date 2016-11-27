@@ -97,17 +97,9 @@ public class JournalEntryModel implements Parcelable {
 
     // get JournalEntryModel object from Cursor
     public JournalEntryModel(Cursor cursor) {
-
-        Log.d("JournalEntryModel", "Curson position = "+cursor.getPosition()+"   Cursor column count = "+cursor.getColumnCount() );
-
-
-
         long date= cursor.getLong(JournalFragment.COL_DATE);
         String  journalEntryJson = cursor.getString(JournalFragment.COL_ENTRY);
-
         Gson gson = new Gson();
-
-
         JournalEntryModel journalEntryObj = gson.fromJson(journalEntryJson, JournalEntryModel.class);
 
         this.quote = journalEntryObj.getQuote();
@@ -117,7 +109,6 @@ public class JournalEntryModel implements Parcelable {
         this.dailyAffirmations = journalEntryObj.getDailyAffirmations();
         this.amazingThingsHappenedList = journalEntryObj.getAmazingThingsHappenedList();
         this.howCouldIHaveMadeTodayBetter = journalEntryObj.getHowCouldIHaveMadeTodayBetter();
-
     }
 
 

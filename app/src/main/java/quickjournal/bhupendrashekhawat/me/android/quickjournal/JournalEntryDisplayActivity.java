@@ -196,7 +196,7 @@ public class JournalEntryDisplayActivity extends AppCompatActivity  implements a
             return null;
         }
 
-        Log.d(LOG_TAG, "Journal date = "+journalEntryDate);
+        //Log.d(LOG_TAG, "Journal date = "+journalEntryDate);
 
         //String selectionArgs[] = {journalEntryDate};
 
@@ -237,7 +237,7 @@ public class JournalEntryDisplayActivity extends AppCompatActivity  implements a
 
         int size = cursor.getColumnCount();
 
-        Log.d(LOG_TAG , "COlumn count of cursor = "+size + "cursor position = "+ +cursor.getPosition() );
+        //Log.d(LOG_TAG , "COlumn count of cursor = "+size + "cursor position = "+ +cursor.getPosition() );
 
         if(cursor != null) {
             while (cursor.moveToNext()) {
@@ -246,7 +246,7 @@ public class JournalEntryDisplayActivity extends AppCompatActivity  implements a
         }
 
         if(journalEntryModel != null) {
-            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+            //Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
         }
 
         displayEntry(journalEntryModel);

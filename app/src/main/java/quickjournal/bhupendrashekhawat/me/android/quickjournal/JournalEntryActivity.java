@@ -92,7 +92,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
                 now.get(Calendar.MONTH ) +1,
                 now.get(Calendar.DAY_OF_MONTH));
 
-        Log.d(LOG_TAG, "Toolbar date = "+toolbarDate);
+        //Log.d(LOG_TAG, "Toolbar date = "+toolbarDate);
 
         toolbar.setTitle(toolbarDate);
 
@@ -129,7 +129,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
         if(id == R.id.action_save){
 
            JournalEntryModel savedEntry =  saveEntry();
-            Log.d(LOG_TAG, savedEntry.toString());
+            //Log.d(LOG_TAG, savedEntry.toString());
 
         }
         if(id == R.id.action_choose_date){
@@ -148,12 +148,12 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     public void onBackPressed() {
         super.onBackPressed();
         JournalEntryModel savedEntry =  saveEntry();
-        Log.d(LOG_TAG, savedEntry.toString());
+        //Log.d(LOG_TAG, savedEntry.toString());
     }
 
     public JournalEntryModel saveEntry(){
 
-        Log.d(LOG_TAG, "saveEntry called");
+        //Log.d(LOG_TAG, "saveEntry called");
 
         JournalEntryModel curJournalEntryModel = getCurrentJournalEntryModelObj();
         //show Toast saying journal entry saved
@@ -177,21 +177,17 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "onStop Called");
+        //Log.d(LOG_TAG, "onStop Called");
         EventBus.getDefault().unregister(this);
-        /*JournalEntryModel savedEntry =  saveEntry();
-        Log.d(LOG_TAG, savedEntry.toString());*/
-
-
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy Called");
+        //Log.d(LOG_TAG, "onDestroy Called");
         JournalEntryModel savedEntry =  saveEntry();
-        Log.d(LOG_TAG, savedEntry.toString());
+        //Log.d(LOG_TAG, savedEntry.toString());
 
 
     }
@@ -210,7 +206,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
 
         //toolbar.setTitle(toolbarDate);
 
-        Log.d(LOG_TAG, "Epoch Time is " +epochDate);
+        //Log.d(LOG_TAG, "Epoch Time is " +epochDate);
 
     }
 
@@ -231,7 +227,7 @@ public class JournalEntryActivity extends AppCompatActivity implements DatePicke
     public void updateEditEntryOnDateChange(JournalEntryEditUpdateOnDateChangeEvent journalEntryEditUpdateOnDateChangeEvent){
 
         JournalEntryModel journalEntryModel = journalEntryEditUpdateOnDateChangeEvent.getJournalEntryModel();
-        Log.d(LOG_TAG, "   updateEditEntryOnDateChange is called with  journalEntryModel :\n " +journalEntryModel);
+        //Log.d(LOG_TAG, "   updateEditEntryOnDateChange is called with  journalEntryModel :\n " +journalEntryModel);
         populateJournalEntry(journalEntryModel);
 
     }

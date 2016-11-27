@@ -42,7 +42,7 @@ public class AuthActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             // already signed in
             String userMail  = mAuth.getCurrentUser().getEmail();
-            Log.d(LOG_TAG, "Usermail is "+userMail);
+            //Log.d(LOG_TAG, "Usermail is "+userMail);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(USER_DISPLAY_NAME, mAuth.getCurrentUser().getDisplayName());
             intent.putExtra(USER_EMAIL, userMail);
@@ -78,7 +78,7 @@ public class AuthActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             // user is signed in!
             String userMail  = mAuth.getCurrentUser().getEmail();
-            Log.d(LOG_TAG, "Usermail is "+userMail);
+            //Log.d(LOG_TAG, "Usermail is "+userMail);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(USER_DISPLAY_NAME, mAuth.getCurrentUser().getDisplayName());
             intent.putExtra(USER_EMAIL, userMail);

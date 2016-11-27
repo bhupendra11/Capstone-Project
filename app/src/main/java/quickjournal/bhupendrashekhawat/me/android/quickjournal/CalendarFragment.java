@@ -91,7 +91,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
         getLoaderManager().initLoader(CALENDAR_FRAGMENT_LOADER, bundle, this);
 
-        Log.d(LOG_TAG , "EpochDate = " +epochDate+"  Current date is "+DateHelper.getDisplayDate(epochDate));
+        //Log.d(LOG_TAG , "EpochDate = " +epochDate+"  Current date is "+DateHelper.getDisplayDate(epochDate));
 
 
         //for cardview onClick
@@ -102,7 +102,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
                 String date = epochDate+"";
                 // journalEntryModel = new JournalEntryModel(cursor);
 
-                Log.d(LOG_TAG ,"Date sent with intent = "+ date);
+                //Log.d(LOG_TAG ,"Date sent with intent = "+ date);
                 Intent displayIntent = new Intent(getActivity() , JournalEntryDisplayActivity.class);
                 displayIntent.putExtra(JOURNAL_ENTRY_DATE, date.trim());
                 startActivity(displayIntent);
@@ -144,7 +144,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
 
 
-        Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
+        //Log.d(LOG_TAG , "Date selected is "+ epochDate+"   "+DateHelper.getDisplayDate(epochDate));
         Bundle bundle = new Bundle();
         bundle.putLong(JOURNAL_ENTRY_DATE , epochDate);
 
@@ -190,7 +190,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
             long journalEntryDate = args.getLong(JOURNAL_ENTRY_DATE);
             whereArgs =   new String[]{Long.toString(journalEntryDate)};
 
-            Log.d(LOG_TAG , "Journal Entry to be to fetch for date in calendar fragment " +DateHelper.getDisplayDate(journalEntryDate) );
+            //Log.d(LOG_TAG , "Journal Entry to be to fetch for date in calendar fragment " +DateHelper.getDisplayDate(journalEntryDate) );
 
             if(whereArgs == null) {
                 return new CursorLoader(getActivity(),
@@ -223,7 +223,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
        // journalAdapter.swapCursor(cursor);
 
-        Log.d(LOG_TAG, "Cursorcount = "+cursor.getCount()) ;
+        //Log.d(LOG_TAG, "Cursorcount = "+cursor.getCount()) ;
 
 
         if(cursor != null && cursor.getCount() >0) {
@@ -231,7 +231,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
                 journalEntryModel = new JournalEntryModel(cursor);
             }
             if(journalEntryModel != null) {
-                Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+                //Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
                 String displayDate = DateHelper.getDisplayDate(journalEntryModel.getTimestamp());
                 dateTextView.setText(displayDate);
 

@@ -23,22 +23,17 @@ public class JournalEntryProvider extends ContentProvider{
     private JournalEntryDbHelper mOpenHelper ;
     static final int JOURNAL = 100;
 
-
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = JournalEntryContract.CONTENT_AUTHORITY;
-
         matcher.addURI(authority,JournalEntryContract.PATH_JOURNAL, JOURNAL);
-
         return  matcher;
-
     }
 
 
     @Override
     public boolean onCreate() {
         mOpenHelper = new JournalEntryDbHelper(getContext());
-
         return true;
     }
 
@@ -139,7 +134,6 @@ public class JournalEntryProvider extends ContentProvider{
 
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         int rowsUpdated =0;
-
         final int match = sUriMatcher.match(uri);
 
         switch (match){

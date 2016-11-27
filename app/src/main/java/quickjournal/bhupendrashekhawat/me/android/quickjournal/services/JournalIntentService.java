@@ -56,19 +56,15 @@ public class JournalIntentService extends IntentService {
     public static final int COL_ID = 0;
     public static final int COL_DATE = 1;
     public static final int COL_ENTRY = 2;
-
     public static final String SORT_ORDER = JOURNAL_COLUMNS[1] +" "+"DESC";
 
     public JournalIntentService(){
         super("JournalIntentService");
         mContext = this;
-
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_SAVE_JOURNAL_ENTRY.equals(action)) {
@@ -85,18 +81,13 @@ public class JournalIntentService extends IntentService {
     }
 
 
-
     private void handleActionSaveJournalEntry(JournalEntryModel journalEntryModel , long journalEntryDate) {
 
         int numRows =0;
-
         //handle the saving in DB here
         //serialize json and store as string
 
         String journalEntryJson = gson.toJson(journalEntryModel);
-
-        Log.d(LOG_TAG , "Journal Entry to be made on Date " + DateHelper.getDisplayDate(journalEntryDate) +"\n Json: \n"+journalEntryJson );
-
         String whereNotNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + "= ?";
         String whereNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + " IS NULL";
         String[] whereArgs = new String[]{Long.toString(journalEntryDate)};
@@ -129,10 +120,7 @@ public class JournalIntentService extends IntentService {
             cursor.close();
         }
 
-
         if (numRows == 1) {    // Inside db so delete
-
-
             int delete = mContext.getContentResolver().delete(
                     JournalEntryContract.JournalEntry.CONTENT_URI,
                     JournalEntryContract.JournalEntry.COLUMN_DATE + " = ?",
@@ -142,14 +130,13 @@ public class JournalIntentService extends IntentService {
         }
 
         //Insert new entry
-
         ContentValues values = new ContentValues();
         values.put(JournalEntryContract.JournalEntry.COLUMN_DATE, journalEntryDate);
         values.put(JournalEntryContract.JournalEntry.COLUMN_ENTRY, journalEntryJson);
 
         Uri insertedUri = mContext.getContentResolver().insert(JournalEntryContract.JournalEntry.CONTENT_URI,values);
 
-        Log.d(LOG_TAG , "Diary Entry saved in db at URI : "+insertedUri);
+        //Log.d(LOG_TAG , "Diary Entry saved in db at URI : "+insertedUri);
 
 
     }
@@ -161,7 +148,7 @@ public class JournalIntentService extends IntentService {
 
         JournalEntryModel journalEntryModel = null;
 
-        Log.d(LOG_TAG , "Journal Entry to be updated is for date " +DateHelper.getDisplayDate(journalEntryDate)+" Epoch = "+journalEntryDate );
+       // Log.d(LOG_TAG , "Journal Entry to be updated is for date " +DateHelper.getDisplayDate(journalEntryDate)+" Epoch = "+journalEntryDate );
         int numRows =0;
 
         String whereNotNull = JournalEntryContract.JournalEntry.COLUMN_DATE  + "= ?";
@@ -190,8 +177,6 @@ public class JournalIntentService extends IntentService {
             );
         }
 
-
-
         if (cursor != null) {
             numRows = cursor.getCount();
         }
@@ -203,14 +188,10 @@ public class JournalIntentService extends IntentService {
         }
 
         if(journalEntryModel != null) {
-            Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
+            //Log.d(LOG_TAG, "JournalEntry model fetched \n " + journalEntryModel.toString());
         }
-
         EventBus.getDefault().post(new JournalEntryEditUpdateOnDateChangeEvent(journalEntryModel));
         cursor.close();
-
-
-
     }
 
 

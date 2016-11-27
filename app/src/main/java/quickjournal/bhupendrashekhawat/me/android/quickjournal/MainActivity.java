@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(LOG_TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    //Log.d(LOG_TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
-                    Log.d(LOG_TAG, "onAuthStateChanged:signed_out");
+                    //Log.d(LOG_TAG, "onAuthStateChanged:signed_out");
                 }
                 // ...
             }
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
 
         if(user_prof_pic_url != null && userImageView != null){
-            Log.d(LOG_TAG , "Image url = "+ user_prof_pic_url);
+            //Log.d(LOG_TAG , "Image url = "+ user_prof_pic_url);
             Picasso.with(this).load(user_prof_pic_url)
                     .resize(150, 150)
                     .into(userImageView, new Callback() {
