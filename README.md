@@ -10,13 +10,13 @@ journal entries , you only need to record the most important things of your day 
 
 
 
-##Intended User
+## Intended User
 This app is for everyone who wants to record their day in a fast and easy way in a digital journal.
 This app instead of providing blank page to write your journal , gives your well thought out
 questions to answer daily and record highlights.
 
 
-##Features
+## Features
 The main features of the app are:
 * A navigation drawer allows the user to navigate to different screens
 * Main screen shows recent journal entries sorted according to latest date.
@@ -25,7 +25,7 @@ The main features of the app are:
 calendar view.
 
 
-##Screenshots
+## Screenshots
 
 ### 1. Login Screen :
 ![a](https://cloud.githubusercontent.com/assets/6179888/20642692/a488cb3e-b43b-11e6-94d3-3bc925aab08f.png)
